@@ -1,0 +1,93 @@
+{
+  "schema_version": 2,
+  "cases": [
+    {
+      "id": "python-feature",
+      "task_class": "feature",
+      "language": "python",
+      "expected_workflow": "skill/workflows/feature/tdd-feature-development.md",
+      "required_documents": [
+        "skill/standards/languages/python.md",
+        "skill/acceptance/change-types/feature.md"
+      ]
+    },
+    {
+      "id": "rust-feature",
+      "task_class": "feature",
+      "language": "rust",
+      "expected_workflow": "skill/workflows/feature/tdd-feature-development.md",
+      "required_documents": [
+        "skill/standards/languages/rust.md",
+        "skill/acceptance/change-types/feature.md"
+      ]
+    },
+    {
+      "id": "python-bug-fix",
+      "task_class": "bug-fix",
+      "language": "python",
+      "expected_workflow": "skill/workflows/bug-fix/regression-first-bug-fix.md",
+      "required_documents": [
+        "skill/standards/languages/python.md",
+        "skill/acceptance/change-types/bug-fix.md"
+      ]
+    },
+    {
+      "id": "cpp-bug-fix",
+      "task_class": "bug-fix",
+      "language": "cpp",
+      "expected_workflow": "skill/workflows/bug-fix/regression-first-bug-fix.md",
+      "required_documents": [
+        "skill/standards/languages/cpp.md",
+        "skill/acceptance/change-types/bug-fix.md"
+      ]
+    },
+    {
+      "id": "python-refactoring",
+      "task_class": "refactoring",
+      "language": "python",
+      "expected_workflow": "skill/workflows/refactoring/characterisation-first-refactoring.md",
+      "required_documents": [
+        "skill/standards/languages/python.md",
+        "skill/acceptance/change-types/refactoring.md"
+      ]
+    },
+    {
+      "id": "dart-refactoring",
+      "task_class": "refactoring",
+      "language": "dart-flutter",
+      "expected_workflow": "skill/workflows/refactoring/characterisation-first-refactoring.md",
+      "required_documents": [
+        "skill/standards/languages/dart-flutter.md",
+        "skill/acceptance/change-types/refactoring.md"
+      ]
+    },
+    {
+      "id": "q-investigation",
+      "task_class": "investigation",
+      "language": "q-kdbplus",
+      "expected_workflow": "skill/workflows/general/technical-investigation.md",
+      "required_documents": [
+        "skill/standards/languages/q-kdbplus.md"
+      ]
+    },
+    {
+      "id": "rust-investigation",
+      "task_class": "investigation",
+      "language": "rust",
+      "expected_workflow": "skill/workflows/general/technical-investigation.md",
+      "required_documents": [
+        "skill/standards/languages/rust.md"
+      ]
+    },
+    {
+      "id": "typescript-feature",
+      "task_class": "feature",
+      "language": "typescript",
+      "expected_workflow": "skill/workflows/feature/tdd-feature-development.md",
+      "required_documents": [
+        "skill/standards/languages/typescript.md",
+        "skill/acceptance/change-types/feature.md"
+      ]
+    }
+  ]
+}

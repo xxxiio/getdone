@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/catalogue-search-result.schema.json",
+  "title": "Catalogue search result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "catalogue_version", "workflow_registry_version", "sources",
+    "source_versions", "query", "requested_id", "filters", "count", "results"
+  ],
+  "properties": {
+    "schema_version": {"const": 3},
+    "catalogue_version": {"$ref": "#/$defs/semver"},
+    "workflow_registry_version": {"$ref": "#/$defs/semver"},
+    "sources": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "source_versions": {
+      "type": "object", "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/semver"}
+    },
+    "query": {"type": "string"},
+    "requested_id": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 1}]},
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kinds", "languages", "tags", "statuses"],
+      "properties": {
+        "kinds": {"type": "array", "items": {"type": "string"}},
+        "languages": {"type": "array", "items": {"type": "string"}},
+        "tags": {"type": "array", "items": {"type": "string"}},
+        "statuses": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "count": {"type": "integer", "minimum": 0},
+    "results": {"type": "array", "items": {"$ref": "#/$defs/result"}}
+  },
+  "$defs": {
+    "semver": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "stringArray": {"type": "array", "items": {"type": "string"}},
+    "nullableString": {"oneOf": [{"type": "null"}, {"type": "string"}]},
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "kind", "title", "status", "summary", "path", "source", "score",
+        "tags", "languages", "use_when", "avoid_when", "related", "aliases",
+        "introduced_in", "deprecated_in", "replaced_by", "matched_alias"
+      ],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"type": "string"},
+        "title": {"type": "string"},
+        "status": {"type": "string"},
+        "summary": {"type": "string"},
+        "path": {"type": "string"},
+        "source": {"type": "string"},
+        "score": {"type": "number", "minimum": 0},
+        "tags": {"$ref": "#/$defs/stringArray"},
+        "languages": {"$ref": "#/$defs/stringArray"},
+        "use_when": {"$ref": "#/$defs/stringArray"},
+        "avoid_when": {"$ref": "#/$defs/stringArray"},
+        "related": {"$ref": "#/$defs/stringArray"},
+        "aliases": {"$ref": "#/$defs/stringArray"},
+        "introduced_in": {"$ref": "#/$defs/semver"},
+        "deprecated_in": {"$ref": "#/$defs/nullableString"},
+        "replaced_by": {"$ref": "#/$defs/nullableString"},
+        "matched_alias": {"$ref": "#/$defs/nullableString"}
+      }
+    }
+  }
+}

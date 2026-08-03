@@ -1,0 +1,1023 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.2.0",
+  "records": {
+    "project-context": {
+      "templates": [
+        "project-context"
+      ],
+      "kind": "singleton",
+      "authority": "Stable project purpose, boundaries, constraints, and current priorities",
+      "statuses": [
+        "draft",
+        "current"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {},
+      "headings": [
+        "Purpose",
+        "Users and stakeholders",
+        "Architecture summary",
+        "Important boundaries",
+        "Supported platforms and environments",
+        "Canonical commands",
+        "Non-negotiable constraints",
+        "Current priorities",
+        "Known risks"
+      ],
+      "section_rules": {
+        "Purpose": "text",
+        "Users and stakeholders": "bullet-list",
+        "Architecture summary": "text",
+        "Important boundaries": "bullet-list",
+        "Supported platforms and environments": "bullet-list",
+        "Canonical commands": "bullet-list",
+        "Non-negotiable constraints": "bullet-list",
+        "Current priorities": "ordered-list",
+        "Known risks": "bullet-list"
+      }
+    },
+    "command-reference": {
+      "templates": [
+        "command-reference"
+      ],
+      "kind": "singleton",
+      "authority": "Exact repository commands and the canonical full health gate",
+      "statuses": [
+        "draft",
+        "current"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {},
+      "headings": [
+        "Environment prerequisites",
+        "Install",
+        "Development build",
+        "Format",
+        "Lint",
+        "Static analysis and type checking",
+        "Unit tests",
+        "Integration and end-to-end tests",
+        "Canonical full health gate",
+        "Package and release",
+        "Security and performance checks",
+        "Unavailable checks"
+      ],
+      "section_rules": {
+        "Environment prerequisites": "bullet-list",
+        "Install": "code-block",
+        "Development build": "code-block",
+        "Format": "code-block",
+        "Lint": "code-block",
+        "Static analysis and type checking": "code-block",
+        "Unit tests": "code-block",
+        "Integration and end-to-end tests": "code-block",
+        "Canonical full health gate": "code-block",
+        "Package and release": "code-block",
+        "Security and performance checks": "code-block",
+        "Unavailable checks": "bullet-list"
+      }
+    },
+    "roadmap": {
+      "templates": [
+        "roadmap"
+      ],
+      "kind": "singleton",
+      "authority": "Approved milestone outcomes and their dependency order",
+      "statuses": [
+        "draft",
+        "current"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "current_milestone": {
+          "type": "nullable-string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Product outcome",
+        "Ordering principles",
+        "Milestones",
+        "Deferred work"
+      ],
+      "section_rules": {
+        "Product outcome": "text",
+        "Ordering principles": "ordered-list",
+        "Milestones": "roadmap",
+        "Deferred work": "bullet-list"
+      },
+      "custom_validator": "roadmap"
+    },
+    "next-step": {
+      "templates": [
+        "next-step"
+      ],
+      "kind": "singleton",
+      "authority": "Exactly one bounded objective that advances active milestone exit criteria",
+      "statuses": [
+        "proposed",
+        "ready",
+        "blocked",
+        "completed",
+        "cancelled"
+      ],
+      "placeholder_statuses": [
+        "proposed"
+      ],
+      "required_frontmatter": {
+        "id": {
+          "type": "string",
+          "pattern": "^NEXT-[0-9]{4}$"
+        },
+        "milestone_id": {
+          "type": "nullable-string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        },
+        "advances_exit_criteria": {
+          "type": "string-array",
+          "item_pattern": "^EC-[0-9]{3}$"
+        }
+      },
+      "headings": [
+        "Objective",
+        "Why this is next",
+        "Preconditions",
+        "Inputs",
+        "Ordered actions",
+        "Expected outputs",
+        "Acceptance criteria",
+        "Validation",
+        "Stop conditions",
+        "Out of scope"
+      ],
+      "section_rules": {
+        "Objective": "text",
+        "Why this is next": "text",
+        "Preconditions": "bullet-list",
+        "Inputs": "bullet-list",
+        "Ordered actions": "ordered-list",
+        "Expected outputs": "bullet-list",
+        "Acceptance criteria": "criteria:NS",
+        "Validation": "code-block",
+        "Stop conditions": "bullet-list",
+        "Out of scope": "bullet-list"
+      },
+      "completion_statuses": [
+        "completed"
+      ]
+    },
+    "current-task": {
+      "templates": [
+        "current-task"
+      ],
+      "kind": "singleton",
+      "authority": "The active task scope and observable desired behaviour",
+      "statuses": [
+        "proposed",
+        "ready",
+        "active",
+        "blocked",
+        "completed",
+        "cancelled"
+      ],
+      "placeholder_statuses": [
+        "proposed"
+      ],
+      "required_frontmatter": {
+        "id": {
+          "type": "string",
+          "pattern": "^TASK-[0-9]{4}$"
+        },
+        "milestone_id": {
+          "type": "nullable-string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Objective",
+        "Current behaviour",
+        "Desired behaviour",
+        "Scope",
+        "Out of scope",
+        "Dependencies",
+        "Risks",
+        "Acceptance criteria",
+        "Validation"
+      ],
+      "section_rules": {
+        "Objective": "text",
+        "Current behaviour": "text",
+        "Desired behaviour": "text",
+        "Scope": "bullet-list",
+        "Out of scope": "bullet-list",
+        "Dependencies": "bullet-list",
+        "Risks": "bullet-list",
+        "Acceptance criteria": "criteria:AC",
+        "Validation": "code-block"
+      },
+      "completion_statuses": [
+        "completed"
+      ]
+    },
+    "acceptance-report": {
+      "templates": [
+        "acceptance-report"
+      ],
+      "kind": "singleton",
+      "authority": "Current task acceptance status and supporting evidence",
+      "statuses": [
+        "draft",
+        "incomplete",
+        "passed",
+        "failed",
+        "waived"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Task",
+        "Gate results",
+        "Commands run",
+        "Checks not run",
+        "Waivers",
+        "Residual risk"
+      ],
+      "section_rules": {
+        "Task": "text",
+        "Gate results": "table",
+        "Commands run": "code-block",
+        "Checks not run": "bullet-list",
+        "Waivers": "bullet-list",
+        "Residual risk": "bullet-list"
+      },
+      "custom_validator": "acceptance-report",
+      "table_headers": [
+        "Gate ID",
+        "Gate",
+        "Status",
+        "Evidence"
+      ]
+    },
+    "project-status": {
+      "templates": [
+        "project-status"
+      ],
+      "kind": "singleton",
+      "authority": "Concise present-tense project state; history belongs in journal records",
+      "statuses": [
+        "draft",
+        "current"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {},
+      "headings": [
+        "Current state",
+        "Current milestone",
+        "Recently completed",
+        "In progress",
+        "Blocked",
+        "Key decisions",
+        "Project health",
+        "Risks",
+        "Remaining milestones",
+        "Next deterministic step"
+      ],
+      "section_rules": {
+        "Current state": "text",
+        "Current milestone": "text",
+        "Recently completed": "bullet-list",
+        "In progress": "bullet-list",
+        "Blocked": "bullet-list",
+        "Key decisions": "bullet-list",
+        "Project health": "bullet-list",
+        "Risks": "bullet-list",
+        "Remaining milestones": "ordered-list",
+        "Next deterministic step": "text"
+      }
+    },
+    "task-record": {
+      "templates": [
+        "task-record"
+      ],
+      "kind": "repeatable",
+      "authority": "Durable task specification, evidence, outcome, and remaining work",
+      "statuses": [
+        "proposed",
+        "ready",
+        "active",
+        "blocked",
+        "completed",
+        "cancelled"
+      ],
+      "placeholder_statuses": [
+        "proposed"
+      ],
+      "required_frontmatter": {
+        "id": {
+          "type": "string",
+          "pattern": "^TASK-[0-9]{4}$"
+        },
+        "milestone_id": {
+          "type": "nullable-string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Objective",
+        "Specification",
+        "Ordered plan",
+        "Acceptance criteria",
+        "Validation evidence",
+        "Outcome",
+        "Remaining work"
+      ],
+      "section_rules": {
+        "Objective": "text",
+        "Specification": "bullet-list",
+        "Ordered plan": "ordered-list",
+        "Acceptance criteria": "criteria:AC",
+        "Validation evidence": "bullet-list",
+        "Outcome": "text",
+        "Remaining work": "bullet-list"
+      },
+      "completion_statuses": [
+        "completed"
+      ]
+    },
+    "milestone-plan": {
+      "templates": [
+        "milestone-plan"
+      ],
+      "kind": "repeatable",
+      "authority": "Detailed execution plan for one approved roadmap milestone",
+      "statuses": [
+        "proposed",
+        "ready",
+        "active",
+        "blocked",
+        "completed",
+        "deferred",
+        "cancelled"
+      ],
+      "placeholder_statuses": [
+        "proposed"
+      ],
+      "required_frontmatter": {
+        "id": {
+          "type": "string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Intended outcome",
+        "Why this milestone matters",
+        "Scope",
+        "Non-goals",
+        "Deliverables",
+        "Dependencies",
+        "Risks",
+        "Ordered implementation sequence",
+        "Exit criteria",
+        "Evidence",
+        "Remaining work",
+        "Next milestone"
+      ],
+      "section_rules": {
+        "Intended outcome": "text",
+        "Why this milestone matters": "text",
+        "Scope": "bullet-list",
+        "Non-goals": "bullet-list",
+        "Deliverables": "bullet-list",
+        "Dependencies": "bullet-list",
+        "Risks": "bullet-list",
+        "Ordered implementation sequence": "ordered-list",
+        "Exit criteria": "criteria:EC",
+        "Evidence": "bullet-list",
+        "Remaining work": "bullet-list",
+        "Next milestone": "text"
+      },
+      "completion_statuses": [
+        "completed"
+      ]
+    },
+    "journal-entry": {
+      "templates": [
+        "journal-entry"
+      ],
+      "kind": "repeatable",
+      "authority": "Append-only historical evidence for one dated iteration",
+      "statuses": [
+        "draft",
+        "recorded"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Context",
+        "Work completed",
+        "Decisions made",
+        "Files or components changed",
+        "Validation performed",
+        "Problems encountered",
+        "Remaining work",
+        "New TODOs",
+        "Risks or blockers",
+        "Resulting next deterministic step"
+      ],
+      "section_rules": {
+        "Context": "text",
+        "Work completed": "bullet-list",
+        "Decisions made": "bullet-list",
+        "Files or components changed": "bullet-list",
+        "Validation performed": "bullet-list",
+        "Problems encountered": "bullet-list",
+        "Remaining work": "bullet-list",
+        "New TODOs": "bullet-list",
+        "Risks or blockers": "bullet-list",
+        "Resulting next deterministic step": "text"
+      }
+    },
+    "task-completion-report": {
+      "templates": [
+        "task-completion-report"
+      ],
+      "kind": "repeatable",
+      "authority": "Final task claim mapped to acceptance and validation evidence",
+      "statuses": [
+        "draft",
+        "final"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Outcome",
+        "Changes made",
+        "Behaviour added or corrected",
+        "Tests added or changed",
+        "Validation results",
+        "Documentation updated",
+        "Design decisions",
+        "Known limitations",
+        "Remaining TODOs",
+        "Risks and blockers",
+        "Acceptance gate results",
+        "Next deterministic step"
+      ],
+      "section_rules": {
+        "Outcome": "text",
+        "Changes made": "bullet-list",
+        "Behaviour added or corrected": "bullet-list",
+        "Tests added or changed": "bullet-list",
+        "Validation results": "bullet-list",
+        "Documentation updated": "bullet-list",
+        "Design decisions": "bullet-list",
+        "Known limitations": "bullet-list",
+        "Remaining TODOs": "bullet-list",
+        "Risks and blockers": "bullet-list",
+        "Acceptance gate results": "table",
+        "Next deterministic step": "text"
+      }
+    },
+    "milestone-progress-report": {
+      "templates": [
+        "milestone-progress-report"
+      ],
+      "kind": "repeatable",
+      "authority": "Evidence-based milestone checkpoint without subjective percentages",
+      "statuses": [
+        "draft",
+        "final"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "milestone_id": {
+          "type": "nullable-string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Intended outcome",
+        "Completed deliverables",
+        "Exit-criterion status",
+        "In progress",
+        "Blocked",
+        "Risks",
+        "Scope changes",
+        "Remaining work",
+        "Next deterministic step"
+      ],
+      "section_rules": {
+        "Intended outcome": "text",
+        "Completed deliverables": "bullet-list",
+        "Exit-criterion status": "table",
+        "In progress": "bullet-list",
+        "Blocked": "bullet-list",
+        "Risks": "bullet-list",
+        "Scope changes": "bullet-list",
+        "Remaining work": "bullet-list",
+        "Next deterministic step": "text"
+      }
+    },
+    "handoff-report": {
+      "templates": [
+        "handoff-report"
+      ],
+      "kind": "repeatable",
+      "authority": "Exact repository and task state needed by the next agent or session",
+      "statuses": [
+        "draft",
+        "final"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Current objective",
+        "Completed work",
+        "Repository state",
+        "Commands and results",
+        "Decisions and rationale",
+        "Files or components in focus",
+        "Open TODOs",
+        "Risks and blockers",
+        "Exact next deterministic step"
+      ],
+      "section_rules": {
+        "Current objective": "text",
+        "Completed work": "bullet-list",
+        "Repository state": "bullet-list",
+        "Commands and results": "bullet-list",
+        "Decisions and rationale": "bullet-list",
+        "Files or components in focus": "bullet-list",
+        "Open TODOs": "bullet-list",
+        "Risks and blockers": "bullet-list",
+        "Exact next deterministic step": "text"
+      }
+    },
+    "architecture-decision-record": {
+      "templates": [
+        "architecture-decision-record"
+      ],
+      "kind": "repeatable",
+      "authority": "Durable architecture decision and its consequences",
+      "statuses": [
+        "proposed",
+        "accepted",
+        "rejected",
+        "superseded",
+        "deprecated"
+      ],
+      "placeholder_statuses": [
+        "proposed"
+      ],
+      "required_frontmatter": {
+        "id": {
+          "type": "string",
+          "pattern": "^ADR-[0-9]{4}$"
+        },
+        "supersedes": {
+          "type": "string-array",
+          "item_pattern": "^ADR-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Context",
+        "Decision",
+        "Alternatives considered",
+        "Consequences",
+        "Validation",
+        "Follow-up"
+      ],
+      "section_rules": {
+        "Context": "text",
+        "Decision": "text",
+        "Alternatives considered": "bullet-list",
+        "Consequences": "bullet-list",
+        "Validation": "bullet-list",
+        "Follow-up": "bullet-list"
+      }
+    },
+    "acceptance-waiver": {
+      "templates": [
+        "acceptance-waiver"
+      ],
+      "kind": "repeatable",
+      "authority": "Explicit owned and time-bounded exception to an acceptance requirement",
+      "statuses": [
+        "proposed",
+        "approved",
+        "expired",
+        "revoked"
+      ],
+      "placeholder_statuses": [
+        "proposed"
+      ],
+      "required_frontmatter": {
+        "id": {
+          "type": "string",
+          "pattern": "^WAIVER-[0-9]{4}$"
+        },
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Requirement",
+        "Reason",
+        "Risk",
+        "Compensating control",
+        "Owner",
+        "Expiry or removal condition",
+        "Follow-up TODO",
+        "Approval evidence"
+      ],
+      "section_rules": {
+        "Requirement": "text",
+        "Reason": "text",
+        "Risk": "text",
+        "Compensating control": "text",
+        "Owner": "text",
+        "Expiry or removal condition": "text",
+        "Follow-up TODO": "text",
+        "Approval evidence": "text"
+      }
+    },
+    "risk-register": {
+      "templates": [
+        "risk-register"
+      ],
+      "kind": "register",
+      "authority": "Potential future problems, triggers, mitigations, owners, and review states",
+      "statuses": [
+        "current"
+      ],
+      "placeholder_statuses": [
+        "current"
+      ],
+      "required_frontmatter": {},
+      "headings": [],
+      "section_rules": {},
+      "custom_validator": "register",
+      "table_headers": [
+        "ID",
+        "Risk event",
+        "Trigger",
+        "Likelihood",
+        "Impact",
+        "Mitigation",
+        "Owner",
+        "Review condition",
+        "Status"
+      ]
+    },
+    "blocker-register": {
+      "templates": [
+        "blocker-register"
+      ],
+      "kind": "register",
+      "authority": "Conditions currently preventing named work and their exact unblock condition",
+      "statuses": [
+        "current"
+      ],
+      "placeholder_statuses": [
+        "current"
+      ],
+      "required_frontmatter": {},
+      "headings": [],
+      "section_rules": {},
+      "custom_validator": "register",
+      "table_headers": [
+        "ID",
+        "Blocked work",
+        "Cause",
+        "Owner",
+        "Unblock condition",
+        "Next check",
+        "Status"
+      ]
+    },
+    "dependency-register": {
+      "templates": [
+        "dependency-register"
+      ],
+      "kind": "register",
+      "authority": "Internal and external dependencies for named work items",
+      "statuses": [
+        "current"
+      ],
+      "placeholder_statuses": [
+        "current"
+      ],
+      "required_frontmatter": {},
+      "headings": [],
+      "section_rules": {},
+      "custom_validator": "register",
+      "table_headers": [
+        "ID",
+        "Work item",
+        "Dependency",
+        "Type",
+        "Owner",
+        "Required by",
+        "Verification",
+        "Status"
+      ]
+    },
+    "todo-register": {
+      "templates": [
+        "todo-register"
+      ],
+      "kind": "register",
+      "authority": "Actionable work not represented by the current task or approved roadmap milestone",
+      "statuses": [
+        "current"
+      ],
+      "placeholder_statuses": [
+        "current"
+      ],
+      "required_frontmatter": {},
+      "headings": [
+        "Active",
+        "Deferred",
+        "Completed"
+      ],
+      "section_rules": {
+        "Active": "todo-register",
+        "Deferred": "todo-register",
+        "Completed": "todo-register"
+      },
+      "custom_validator": "todo-register"
+    },
+    "change-impact": {
+      "templates": [
+        "change-impact"
+      ],
+      "kind": "singleton",
+      "authority": "Declared task impact dimensions that activate specialist gates and required outputs",
+      "statuses": [
+        "draft",
+        "ready",
+        "current"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Task",
+        "Impact classification",
+        "Assumptions and unknowns",
+        "Required outputs",
+        "Test tier"
+      ],
+      "section_rules": {
+        "Task": "text",
+        "Impact classification": "table",
+        "Assumptions and unknowns": "bullet-list",
+        "Required outputs": "bullet-list",
+        "Test tier": "bullet-list"
+      },
+      "custom_validator": "change-impact",
+      "table_headers": [
+        "Impact",
+        "Value",
+        "Reason",
+        "Activated gate"
+      ]
+    },
+    "evidence-manifest": {
+      "templates": [
+        "evidence-manifest"
+      ],
+      "kind": "singleton",
+      "authority": "Machine-checkable claims and evidence for current task acceptance and quality gates",
+      "statuses": [
+        "draft",
+        "incomplete",
+        "final"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "task_id": {
+          "type": "nullable-string",
+          "pattern": "^TASK-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Task",
+        "Acceptance evidence",
+        "Quality gate evidence",
+        "Checks not run",
+        "Waivers",
+        "Residual risk"
+      ],
+      "section_rules": {
+        "Task": "text",
+        "Acceptance evidence": "table",
+        "Quality gate evidence": "table",
+        "Checks not run": "bullet-list",
+        "Waivers": "bullet-list",
+        "Residual risk": "bullet-list"
+      },
+      "custom_validator": "evidence-manifest"
+    },
+    "invariant-register": {
+      "templates": [
+        "invariant-register"
+      ],
+      "kind": "register",
+      "authority": "Critical system truths that changes must preserve and preferably enforce mechanically",
+      "statuses": [
+        "draft",
+        "current"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {},
+      "headings": [
+        "Invariants"
+      ],
+      "section_rules": {
+        "Invariants": "table"
+      },
+      "custom_validator": "invariant-register",
+      "table_headers": [
+        "ID",
+        "Invariant",
+        "Scope",
+        "Enforcement",
+        "Review trigger",
+        "Status"
+      ]
+    },
+    "project-plan": {
+      "templates": [
+        "project-plan"
+      ],
+      "kind": "repeatable",
+      "authority": "Approved whole-project outcome, MVP, boundaries, milestone sequence, and first step",
+      "statuses": [
+        "draft",
+        "approved",
+        "superseded",
+        "cancelled"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "required_frontmatter": {
+        "plan_id": {
+          "type": "string",
+          "pattern": "^PROJECT-PLAN-[0-9]{4}$"
+        }
+      },
+      "headings": [
+        "Problem statement",
+        "Intended users",
+        "Desired outcomes",
+        "Success measures",
+        "Scope",
+        "Non-goals",
+        "Constraints",
+        "Assumptions",
+        "Unknowns requiring investigation",
+        "Major system boundaries",
+        "Candidate approaches",
+        "Selected direction",
+        "MVP definition",
+        "Milestones",
+        "Dependencies",
+        "Risks",
+        "Deferred work",
+        "First deterministic step"
+      ],
+      "section_rules": {
+        "Problem statement": "text",
+        "Intended users": "bullet-list",
+        "Desired outcomes": "bullet-list",
+        "Success measures": "bullet-list",
+        "Scope": "bullet-list",
+        "Non-goals": "bullet-list",
+        "Constraints": "bullet-list",
+        "Assumptions": "bullet-list",
+        "Unknowns requiring investigation": "bullet-list",
+        "Major system boundaries": "bullet-list",
+        "Candidate approaches": "bullet-list",
+        "Selected direction": "text",
+        "MVP definition": "bullet-list",
+        "Milestones": "ordered-list",
+        "Dependencies": "bullet-list",
+        "Risks": "bullet-list",
+        "Deferred work": "bullet-list",
+        "First deterministic step": "text"
+      }
+    },
+    "execution-plan": {
+      "templates": [
+        "execution-plan"
+      ],
+      "kind": "repeatable",
+      "authority": "Approved decomposition of one milestone into reviewable implementation slices",
+      "statuses": [
+        "draft",
+        "ready",
+        "active",
+        "completed",
+        "superseded",
+        "cancelled"
+      ],
+      "placeholder_statuses": [
+        "draft"
+      ],
+      "completion_statuses": [
+        "completed"
+      ],
+      "required_frontmatter": {
+        "plan_id": {
+          "type": "string",
+          "pattern": "^PLAN-[0-9]{4}$"
+        },
+        "milestone_id": {
+          "type": "string",
+          "pattern": "^MILESTONE-[0-9]{4}$"
+        },
+        "first_slice_id": {
+          "type": "string",
+          "pattern": "^SLICE-[0-9]{3}$"
+        }
+      },
+      "headings": [
+        "Outcome",
+        "Why planning is required",
+        "Preconditions",
+        "Assumptions and unknowns",
+        "Slices",
+        "Integration order",
+        "Risks and stop conditions",
+        "First deterministic step"
+      ],
+      "section_rules": {
+        "Outcome": "text",
+        "Why planning is required": "text",
+        "Preconditions": "bullet-list",
+        "Assumptions and unknowns": "bullet-list",
+        "Slices": "text",
+        "Integration order": "ordered-list",
+        "Risks and stop conditions": "bullet-list",
+        "First deterministic step": "text"
+      },
+      "custom_validator": "execution-plan"
+    }
+  }
+}

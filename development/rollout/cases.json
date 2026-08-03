@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "release_target": "1.0.0",
+  "cases": [
+    {
+      "id": "python-feature",
+      "title": "Test-first slug rendering feature",
+      "task_class": "feature",
+      "language": "python",
+      "adapter": "codex",
+      "project": "development/rollout/cases/python-feature/project",
+      "task": "development/rollout/cases/python-feature/task.md",
+      "test_command": [
+        "{python}",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "before_expected": "fail",
+      "solution": "development/rollout/cases/python-feature/solution"
+    },
+    {
+      "id": "cpp-bugfix",
+      "title": "Regression-first empty-window bug fix",
+      "task_class": "bug-fix",
+      "language": "cpp",
+      "adapter": "claude",
+      "project": "development/rollout/cases/cpp-bugfix/project",
+      "task": "development/rollout/cases/cpp-bugfix/task.md",
+      "test_command": [
+        "{python}",
+        "tests/run_tests.py"
+      ],
+      "before_expected": "fail",
+      "solution": "development/rollout/cases/cpp-bugfix/solution"
+    },
+    {
+      "id": "python-refactor",
+      "title": "Characterisation-first invoice refactor",
+      "task_class": "refactoring",
+      "language": "python",
+      "adapter": "cursor",
+      "project": "development/rollout/cases/python-refactor/project",
+      "task": "development/rollout/cases/python-refactor/task.md",
+      "test_command": [
+        "{python}",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "before_expected": "pass",
+      "solution": "development/rollout/cases/python-refactor/solution"
+    }
+  ]
+}

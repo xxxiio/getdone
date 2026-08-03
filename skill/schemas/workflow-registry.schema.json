@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/workflow-registry.schema.json",
+  "title": "Workflow registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_version",
+    "workflows"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "registry_version": {
+      "$ref": "#/$defs/semver",
+      "pattern": "^3\\.0\\.0$"
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workflow"
+      }
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "workflowId": {
+      "type": "string",
+      "pattern": "^workflow(?:\\.[a-z][a-z0-9-]*)+$"
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "status",
+        "path",
+        "summary",
+        "tags",
+        "languages",
+        "aliases",
+        "introduced_in",
+        "deprecated_in",
+        "replaced_by"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/workflowId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "experimental",
+            "stable",
+            "deprecated",
+            "retired"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^skill/workflows/.+\\.md$"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 20
+        },
+        "tags": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "languages": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/workflowId"
+          }
+        },
+        "introduced_in": {
+          "$ref": "#/$defs/semver"
+        },
+        "deprecated_in": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/semver"
+            }
+          ]
+        },
+        "replaced_by": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/workflowId"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "deprecated",
+                  "retired"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "deprecated_in": {
+                "$ref": "#/$defs/semver"
+              },
+              "replaced_by": {
+                "$ref": "#/$defs/workflowId"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "deprecated_in": {
+                "type": "null"
+              },
+              "replaced_by": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

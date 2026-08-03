@@ -1,0 +1,14 @@
+# ChatGPT Adapter
+
+1. Read the consuming project's `AGENTS.md` and local instructions.
+2. Verify `.agent/skills.lock.json` against the shared checkout.
+3. Read `skill/START-HERE.md`, then classify through `skill/workflow-router.md`.
+4. Load only the selected recurring context; do not preload the full `skill/` tree.
+5. Keep mutable plans, reports, and TODOs in the consuming project's `.agent/` directory.
+6. Treat the shared checkout as read-only unless the task explicitly changes the skill pack.
+7. Consult `skill/registry/reuse-catalogue.json` only when a reuse trigger applies.
+
+ChatGPT is reference-only: provide the project files and shared-checkout location in the conversation or connected workspace.
+8. For whole-project discussion, use project planning in discovery mode; treat nothing as approved until the user confirms it.
+9. For approved multi-iteration milestones, use execution planning and produce stable slices plus one first step.
+10. When repository writes are unavailable, return each approved record in a labelled Markdown block with its target `.agent/` path.

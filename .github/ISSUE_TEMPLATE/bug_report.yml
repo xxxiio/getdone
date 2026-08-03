@@ -1,0 +1,76 @@
+name: Bug report
+description: Report reproducible incorrect behaviour in GetDone tooling, records, workflows, or documentation.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve GetDone. Please provide the smallest reproducible case and remove secrets or private project content.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Affected surface
+      options:
+        - CLI or Python tooling
+        - Skill workflow or standard
+        - Bootstrap template or project record
+        - Validation contract
+        - Documentation site
+        - Packaging or release automation
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: GetDone version
+      description: Output from `getdone --version`, a Git tag, or a commit SHA.
+      placeholder: 1.0.0-rc.9
+    validations:
+      required: true
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: Observed behaviour
+      description: What happened? Include the exact error and relevant output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What should have happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide ordered commands or a minimal record/file example.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Python version, installation method, agent/editor, and relevant tool versions.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact and workaround
+      description: Explain who is blocked, data-loss risk, and any known workaround.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues for duplicates.
+          required: true
+        - label: I removed secrets and private project information.
+          required: true
+        - label: I can reproduce this with the version stated above.
+          required: true

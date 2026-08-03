@@ -1,0 +1,95 @@
+{
+  "average_token_reduction": 0.749,
+  "baseline_documents": 82,
+  "baseline_tokens": 19334,
+  "benchmark_cases": 8,
+  "cases": [
+    {
+      "id": "python-feature",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 13,
+      "route_correct": true,
+      "selected_documents": 17,
+      "selected_tokens": 4915,
+      "token_reduction": 0.7458
+    },
+    {
+      "id": "rust-feature",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 13,
+      "route_correct": true,
+      "selected_documents": 17,
+      "selected_tokens": 4866,
+      "token_reduction": 0.7483
+    },
+    {
+      "id": "python-bug-fix",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 13,
+      "route_correct": true,
+      "selected_documents": 17,
+      "selected_tokens": 4894,
+      "token_reduction": 0.7469
+    },
+    {
+      "id": "cpp-bug-fix",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 13,
+      "route_correct": true,
+      "selected_documents": 17,
+      "selected_tokens": 4822,
+      "token_reduction": 0.7506
+    },
+    {
+      "id": "python-refactoring",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 13,
+      "route_correct": true,
+      "selected_documents": 17,
+      "selected_tokens": 4874,
+      "token_reduction": 0.7479
+    },
+    {
+      "id": "dart-refactoring",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 13,
+      "route_correct": true,
+      "selected_documents": 17,
+      "selected_tokens": 4845,
+      "token_reduction": 0.7494
+    },
+    {
+      "id": "q-investigation",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 12,
+      "route_correct": true,
+      "selected_documents": 16,
+      "selected_tokens": 4825,
+      "token_reduction": 0.7504
+    },
+    {
+      "id": "rust-investigation",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "required_documents": 12,
+      "route_correct": true,
+      "selected_documents": 16,
+      "selected_tokens": 4788,
+      "token_reduction": 0.7524
+    }
+  ],
+  "minimum_token_reduction": 0.7458,
+  "missed_acceptance_gates": 0,
+  "required_document_recall": 1.0,
+  "route_accuracy": 1.0,
+  "schema_version": 1,
+  "scope_note": "Static routing and document coverage only; coding outcomes require dogfooding.",
+  "tooling_justified": true
+}

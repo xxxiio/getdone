@@ -1,0 +1,101 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.11", "3.12", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install tooling
+        run: python -m pip install -e ".[docs]"
+      - name: Validate repository
+        run: python development/scripts/validate_repository.py --repository-root .
+      - name: Validate front matter
+        run: python development/scripts/validate_frontmatter.py --repository-root .
+      - name: Validate operational skill content
+        run: python -m development.tools.validate_skill_content --repository-root .
+      - name: Verify release metadata
+        run: python development/scripts/verify_release.py --repository-root .
+      - name: Check generated registry indexes
+        run: python development/scripts/generate_indexes.py --repository-root .
+      - name: Check generated documentation
+        run: python development/scripts/generate_docs.py --repository-root .
+      - name: Build documentation
+        run: zensical build --strict
+      - name: Validate organisation overlay example
+        run: getdone-validate-overlay --repository-root . --overlay skill/references/examples/organisation-catalogue-overlay/registry-overlay.json
+      - name: Search catalogue smoke test
+        run: getdone-search --repository-root . --query "transient failure backoff" --json
+      - name: Context selection smoke test
+        run: getdone-select-context --repository-root . --task-class feature --language python --json
+      - name: Verify context benchmark
+        run: python -m development.tools.benchmark_context_selection --repository-root .
+      - name: Run unit tests
+        run: python -m unittest discover -s tests
+      - name: Compile Python tooling
+        run: python -m compileall getdone development tests
+
+  dogfood:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install tooling
+        run: python -m pip install -e .
+      - name: Run rollout matrix
+        run: python -m development.tools.rollout_validation --repository-root . --check
+
+  package:
+    needs: [validate, dogfood]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build Python distributions
+        run: python -m pip install build && python -m build
+      - name: Build standalone skill pack
+        run: python -m development.tools.build_skill_pack --repository-root . --output dist/getdone-skill-pack-${{ github.sha }}.zip
+      - name: Verify isolated wheel entry points
+        shell: bash
+        run: |
+          mkdir wheel-smoke
+          python -m pip install --target wheel-smoke dist/*.whl
+          (
+            cd wheel-smoke
+            python -c "import getdone; print(getdone.__name__)"
+            python -m getdone.cli --help
+          )
+      - name: Verify standalone skill pack
+        shell: bash
+        run: |
+          mkdir skill-pack-smoke release-smoke-project
+          unzip -q dist/getdone-skill-pack-${{ github.sha }}.zip -d skill-pack-smoke
+          (
+            cd wheel-smoke
+            python -m getdone.cli init --project-root ../release-smoke-project --skills-root ../skill-pack-smoke --profile minimal
+            python -m getdone.cli validate --project-root ../release-smoke-project --skills-root ../skill-pack-smoke
+          )
+      - name: Upload distributable artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: getdone-build-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error

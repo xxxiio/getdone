@@ -1,0 +1,31 @@
+---
+id: policy.registry-compatibility
+version: 1.0.0
+status: stable
+---
+# Registry Compatibility
+
+## Applies when
+A workflow, catalogue entry, identifier, alias, lifecycle state, registry schema, or
+search-result contract changes.
+
+## Required action
+1. Treat JSON registries as discovery metadata and canonical Markdown as procedure or
+   guidance.
+2. Keep canonical IDs permanent; represent renames with globally unique aliases.
+3. Use semantic versions for registry/catalogue contracts and integer major versions for
+   JSON schema contracts.
+4. Mark removals, field-meaning changes, narrower accepted values, alias removal, or
+   changed resolution semantics as breaking changes.
+5. Deprecate before retirement, provide an active same-kind replacement, and retain exact
+   ID and alias resolution after retirement.
+6. Keep organisation overlay namespaces distinct and require explicit loading and pinning.
+7. Regenerate human-readable indexes from JSON; never edit them manually.
+
+## Required evidence
+Record compatibility classification, introduced/deprecated version, replacement and
+migration guidance, schema validation, alias-resolution tests, and generated-index checks.
+
+## Exceptions
+Editorial changes that do not alter discovery, accepted data, lifecycle, or resolution may
+use a patch contract version. Identifier reuse is never permitted.

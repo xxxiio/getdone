@@ -1,0 +1,61 @@
+name: Workflow or skill proposal
+description: Propose a reusable workflow, standard, acceptance gate, policy, template, or adapter.
+title: "[Skill proposal]: "
+labels: ["skill-proposal", "triage"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Proposed kind
+      options:
+        - Workflow
+        - Standard
+        - Acceptance gate
+        - Policy
+        - Project record or template
+        - Agent adapter
+        - Reusable reference
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: Exact trigger
+      description: State when an agent must select or apply this item.
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Observed failure prevented
+      description: Give concrete examples or evidence showing why existing guidance is insufficient.
+    validations:
+      required: true
+  - type: textarea
+    id: use_avoid
+    attributes:
+      label: Use and avoid conditions
+      description: Explain both when it applies and when it must not be selected.
+    validations:
+      required: true
+  - type: textarea
+    id: outputs
+    attributes:
+      label: Required outputs and evidence
+      description: List the records, implementation artefacts, commands, or evidence it must produce.
+    validations:
+      required: true
+  - type: textarea
+    id: overlap
+    attributes:
+      label: Overlap and consolidation analysis
+      description: Identify related workflows or contracts and what can be reused, replaced, or retired.
+    validations:
+      required: true
+  - type: textarea
+    id: budget
+    attributes:
+      label: Context and maintenance budget
+      description: Estimate selected-token cost, registry/schema changes, migrations, validators, and tests.
+    validations:
+      required: true

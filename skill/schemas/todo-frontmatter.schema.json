@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project TODO",
+  "type": "object",
+  "required": ["id", "status", "priority"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^TODO-[0-9]{4,}$"},
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "ready", "in-progress", "blocked", "done", "deferred", "cancelled"]
+    },
+    "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]}
+  },
+  "additionalProperties": true
+}

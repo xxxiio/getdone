@@ -1,0 +1,50 @@
+---
+template: project-status
+template_version: 2.0.0
+project_owned: true
+record_contract: project-status
+record_schema_version: 1
+status: draft
+---
+
+# Project Status
+
+## Current state
+
+<!-- Present-tense supported state in 2-5 sentences. Do not copy journal history. -->
+
+## Current milestone
+
+<!-- Milestone ID, title, status, and the next unmet exit criterion. -->
+
+## Recently completed
+
+<!-- Bullet list of only the most recent material outcomes, with evidence links. -->
+
+## In progress
+
+<!-- Bullet list of active task IDs and observable outcomes. -->
+
+## Blocked
+
+<!-- Bullet list of blocker IDs and unblock conditions, or `- None.` -->
+
+## Key decisions
+
+<!-- Bullet list of applicable ADR IDs and one-line consequences. -->
+
+## Project health
+
+<!-- Bullet list of build, tests, packaging, security, data integrity, and deployment status. -->
+
+## Risks
+
+<!-- Bullet list of active risk IDs and mitigations. -->
+
+## Remaining milestones
+
+<!-- Ordered list of approved milestone IDs. Do not include unscheduled ideas. -->
+
+## Next deterministic step
+
+<!-- NEXT ID and exact objective. -->

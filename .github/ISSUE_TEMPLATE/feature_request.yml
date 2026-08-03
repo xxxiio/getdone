@@ -1,0 +1,77 @@
+name: Feature request
+description: Propose a bounded improvement backed by an observed user or agent need.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        GetDone favours small, enforceable additions with clear triggers and low recurring context cost.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the observed failure, friction, or missing capability. Avoid starting with a preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: users
+    attributes:
+      label: Who needs this?
+      description: Identify the user, agent, project type, and frequency of the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired observable outcome
+      description: State how a user can tell the improvement works.
+    validations:
+      required: true
+  - type: dropdown
+    id: likely_surface
+    attributes:
+      label: Likely product surface
+      options:
+        - CLI or tooling
+        - Workflow
+        - Standard or acceptance gate
+        - Project record or bootstrap template
+        - Agent adapter
+        - Documentation
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Existing alternatives considered
+      description: Explain why an existing workflow, contract, template, or project-specific extension is insufficient.
+    validations:
+      required: true
+  - type: textarea
+    id: context_cost
+    attributes:
+      label: Accuracy and context-cost impact
+      description: What should be loaded, validated, generated, or retired? Estimate recurring context impact where applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Proposed acceptance criteria
+      description: Provide binary, observable criteria.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and the skills catalogue.
+          required: true
+        - label: This is broadly reusable and not only project-specific guidance.
+          required: true

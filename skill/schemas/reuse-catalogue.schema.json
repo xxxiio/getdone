@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/reuse-catalogue.schema.json",
+  "title": "Reuse catalogue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "catalogue_version",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "catalogue_version": {
+      "$ref": "#/$defs/semver",
+      "pattern": "^3\\.0\\.0$"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "entryId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.md$"
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "status",
+        "summary",
+        "path",
+        "tags",
+        "languages",
+        "use_when",
+        "avoid_when",
+        "related",
+        "aliases",
+        "introduced_in",
+        "deprecated_in",
+        "replaced_by"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entryId"
+        },
+        "kind": {
+          "enum": [
+            "shared-component",
+            "design-pattern",
+            "decision-record",
+            "worked-example"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "experimental",
+            "stable",
+            "deprecated",
+            "retired"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 20
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "tags": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "languages": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "use_when": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "avoid_when": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "related": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/entryId"
+          }
+        },
+        "introduced_in": {
+          "$ref": "#/$defs/semver"
+        },
+        "deprecated_in": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/semver"
+            }
+          ]
+        },
+        "replaced_by": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/entryId"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "deprecated",
+                  "retired"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "deprecated_in": {
+                "$ref": "#/$defs/semver"
+              },
+              "replaced_by": {
+                "$ref": "#/$defs/entryId"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "deprecated_in": {
+                "type": "null"
+              },
+              "replaced_by": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

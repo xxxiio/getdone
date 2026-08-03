@@ -1,0 +1,40 @@
+name: Documentation improvement
+description: Report unclear, missing, stale, or incorrect GetDone documentation.
+title: "[Docs]: "
+labels: ["documentation", "triage"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Documentation location
+      description: File path, page title, heading, or URL.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is unclear or incorrect?
+      description: Quote only the minimum necessary text and explain the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: audience
+    attributes:
+      label: Affected audience and task
+      description: Explain what the reader was trying to accomplish.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Suggested correction
+      description: Describe the expected explanation, example, or navigation change.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I checked the current main-branch documentation.
+          required: true
+        - label: I searched existing documentation issues.
+          required: true

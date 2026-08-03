@@ -1,0 +1,25 @@
+---
+id: policy.secrets-and-credentials
+version: 1.0.0
+status: stable
+---
+# Secrets and Credentials
+
+## Applies when
+Code, configuration, logs, examples, fixtures, reports, or tooling handles credentials or
+sensitive authentication material.
+
+## Required action
+1. Use the project-approved secret store or environment mechanism.
+2. Keep secrets out of source, templates, command history, logs, reports, and fixtures.
+3. Redact diagnostics and use synthetic test values that cannot authenticate.
+4. If exposure is suspected, stop using the value, report it as compromised, and follow
+   the project incident and rotation process.
+
+## Required evidence
+Record the storage mechanism, redaction test, secret-scanning result when available, and
+rotation or incident reference for an exposure.
+
+## Exceptions
+Public identifiers and deliberately non-secret test values must be clearly labelled; they
+must not resemble or reuse production credentials.

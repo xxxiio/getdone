@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.4.0",
+  "required_guidance_references": [
+    "AGENTS.md",
+    "skill/START-HERE.md",
+    ".agent/skills.lock.json",
+    "skill/workflow-router.md",
+    ".agent/",
+    "skill/registry/reuse-catalogue.json"
+  ],
+  "required_template_references": [
+    "AGENTS.md",
+    ".agent/skills-reference.md",
+    ".agent/skills.lock.json",
+    "skill/workflow-router.md",
+    ".agent/",
+    "skill/registry/reuse-catalogue.json"
+  ],
+  "max_guidance_nonempty_lines": 24,
+  "adapters": {
+    "chatgpt": {
+      "display_name": "ChatGPT",
+      "guidance": "skill/adapters/chatgpt.md",
+      "delivery": "reference-only",
+      "destination": null,
+      "template": null
+    },
+    "codex": {
+      "display_name": "Codex",
+      "guidance": "skill/adapters/codex.md",
+      "delivery": "bootstrap-managed",
+      "destination": "AGENTS.md",
+      "template": null
+    },
+    "claude": {
+      "display_name": "Claude Code",
+      "guidance": "skill/adapters/claude.md",
+      "delivery": "project-file",
+      "destination": "CLAUDE.md",
+      "template": "skill/adapters/templates/claude/CLAUDE.md"
+    },
+    "cursor": {
+      "display_name": "Cursor",
+      "guidance": "skill/adapters/cursor.md",
+      "delivery": "project-file",
+      "destination": ".cursor/rules/getdone.mdc",
+      "template": "skill/adapters/templates/cursor/.cursor/rules/getdone.mdc"
+    },
+    "github-copilot": {
+      "display_name": "GitHub Copilot",
+      "guidance": "skill/adapters/github-copilot.md",
+      "delivery": "project-file",
+      "destination": ".github/copilot-instructions.md",
+      "template": "skill/adapters/templates/github-copilot/.github/copilot-instructions.md"
+    }
+  }
+}

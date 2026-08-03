@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/getdone/public-contracts.schema.json",
+  "title": "Public contract freeze manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "release_line",
+    "status",
+    "supported_python",
+    "supported_operating_systems",
+    "cli_exit_codes",
+    "cli_commands",
+    "bootstrap_profiles",
+    "adapter_contract_version",
+    "schemas"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "release_line": {
+      "const": "1.x"
+    },
+    "status": {
+      "enum": [
+        "frozen-for-rc",
+        "stable"
+      ]
+    },
+    "supported_python": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^3\\.[0-9]+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "supported_operating_systems": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "cli_exit_codes": {
+      "type": "object",
+      "required": [
+        "success",
+        "validation_or_operational_error",
+        "usage_error"
+      ],
+      "properties": {
+        "success": {
+          "const": 0
+        },
+        "validation_or_operational_error": {
+          "const": 1
+        },
+        "usage_error": {
+          "const": 2
+        }
+      },
+      "additionalProperties": false
+    },
+    "cli_commands": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^getdone(?:-|$)"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "bootstrap_profiles": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+      },
+      "minProperties": 1
+    },
+    "adapter_contract_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "schemas": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "path",
+          "version"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^skill/schemas/.+\\.json$"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "minProperties": 1
+    }
+  },
+  "additionalProperties": false
+}

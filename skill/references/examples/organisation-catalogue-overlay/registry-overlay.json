@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "overlay_version": "1.0.0",
+  "organisation": "Example Organisation",
+  "namespace": "example",
+  "entries": [
+    {
+      "id": "org.example.component.audit-event-envelope",
+      "kind": "shared-component",
+      "title": "Audit Event Envelope",
+      "status": "stable",
+      "summary": "Standardise auditable security and compliance events across organisation-owned services.",
+      "path": "catalogue/shared-components/audit-event-envelope.md",
+      "tags": [
+        "audit",
+        "compliance",
+        "events"
+      ],
+      "languages": [
+        "any"
+      ],
+      "use_when": [
+        "Events must be consumed consistently across organisation boundaries."
+      ],
+      "avoid_when": [
+        "A local domain event or ordinary diagnostic log is sufficient."
+      ],
+      "related": [
+        "component.logging"
+      ],
+      "aliases": [],
+      "introduced_in": "1.0.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    }
+  ],
+  "workflows": []
+}

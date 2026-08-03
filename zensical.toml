@@ -1,0 +1,48 @@
+[project]
+site_name = "GetDone"
+site_description = "Deterministic workflows, standards, records, and validation for coding agents."
+docs_dir = "site_docs"
+site_dir = "site"
+use_directory_urls = true
+nav = [
+  { "Home" = "index.md" },
+  { "Quick start" = "quickstart.md" },
+  { "Golden path" = "golden-path.md" },
+  { "Distribution" = "distribution.md" },
+  { "Concepts" = [
+    "concepts/development-lifecycle.md",
+    "concepts/project-records.md",
+    "concepts/planning.md",
+  ] },
+  { "Guides" = [
+    "guides/using-the-pack.md",
+    "guides/adopting-existing-project.md",
+  ] },
+  { "Skills catalogue" = [
+    "catalogue/index.md",
+    { "Workflows" = "catalogue/workflows/index.md" },
+    { "Reusable skills" = "catalogue/reuse/index.md" },
+    { "Language standards" = "catalogue/languages.md" },
+    { "Policies" = "catalogue/policies.md" },
+    { "Templates" = "catalogue/templates.md" },
+    { "Adapters" = "catalogue/adapters.md" },
+    { "Schemas" = "catalogue/schemas.md" },
+  ] },
+  { "Reference" = [
+    "supported-versions.md",
+    "reference/package-naming.md",
+    "reference/cli.md",
+    "reference/source-map.md",
+  ] },
+  { "Maintainers" = [
+    "maintainers/repository-development.md",
+  ] },
+]
+
+[project.theme]
+features = [
+  "navigation.tabs",
+  "navigation.sections",
+  "search.highlight",
+  "content.code.copy",
+]

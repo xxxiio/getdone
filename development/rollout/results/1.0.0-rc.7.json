@@ -1,0 +1,64 @@
+{
+  "cases": [
+    {
+      "adapter": "codex",
+      "adapter_status": "bootstrap-managed",
+      "after": "passed",
+      "before": "expected-failure",
+      "context_documents": 6,
+      "context_tokens": 3928,
+      "id": "python-feature",
+      "language": "python",
+      "project_validation": "passed",
+      "task_class": "feature"
+    },
+    {
+      "adapter": "claude",
+      "adapter_status": "created",
+      "after": "passed",
+      "before": "expected-failure",
+      "context_documents": 6,
+      "context_tokens": 3879,
+      "id": "cpp-bugfix",
+      "language": "cpp",
+      "project_validation": "passed",
+      "task_class": "bug-fix"
+    },
+    {
+      "adapter": "cursor",
+      "adapter_status": "created",
+      "after": "passed",
+      "before": "passed",
+      "context_documents": 6,
+      "context_tokens": 3886,
+      "id": "python-refactor",
+      "language": "python",
+      "project_validation": "passed",
+      "task_class": "refactoring"
+    }
+  ],
+  "limitations": [
+    "Adapter delivery paths were exercised locally; independent vendor-agent runs remain external validation.",
+    "The matrix validates small deterministic tasks and does not claim coverage of every project architecture."
+  ],
+  "release_target": "1.0.0-rc.7",
+  "schema_version": 1,
+  "summary": {
+    "adapters": [
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "all_passed": true,
+    "case_count": 3,
+    "languages": [
+      "cpp",
+      "python"
+    ],
+    "task_classes": [
+      "bug-fix",
+      "feature",
+      "refactoring"
+    ]
+  }
+}

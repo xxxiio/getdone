@@ -1,0 +1,72 @@
+{
+  "adapter_contract_version": "1.4.0",
+  "bootstrap_profiles": {
+    "minimal": "1.6.0",
+    "standard": "1.7.0"
+  },
+  "cli_commands": [
+    "getdone",
+    "getdone-check-updates",
+    "getdone-init",
+    "getdone-install-adapter",
+    "getdone-lock",
+    "getdone-migrate",
+    "getdone-search",
+    "getdone-select-context",
+    "getdone-validate-overlay",
+    "getdone-validate-project",
+    "getdone-validate-records"
+  ],
+  "cli_exit_codes": {
+    "success": 0,
+    "usage_error": 2,
+    "validation_or_operational_error": 1
+  },
+  "release_line": "1.x",
+  "schema_version": 1,
+  "schemas": {
+    "adapter-manifest": {
+      "path": "skill/schemas/adapter-manifest.schema.json",
+      "version": 1
+    },
+    "catalogue-overlay": {
+      "path": "skill/schemas/catalogue-overlay.schema.json",
+      "version": 1
+    },
+    "catalogue-search-result": {
+      "path": "skill/schemas/catalogue-search-result.schema.json",
+      "version": 3
+    },
+    "context-selection-manifest": {
+      "path": "skill/schemas/context-selection-manifest.schema.json",
+      "version": 2
+    },
+    "project-record-contracts": {
+      "path": "skill/schemas/project-record-contracts.schema.json",
+      "version": 1
+    },
+    "reuse-catalogue": {
+      "path": "skill/schemas/reuse-catalogue.schema.json",
+      "version": 2
+    },
+    "skills-lock": {
+      "path": "skill/schemas/skills-lock.schema.json",
+      "version": 1
+    },
+    "workflow-registry": {
+      "path": "skill/schemas/workflow-registry.schema.json",
+      "version": 2
+    }
+  },
+  "status": "frozen-for-rc",
+  "supported_operating_systems": [
+    "ubuntu-latest",
+    "macos-latest",
+    "windows-latest"
+  ],
+  "supported_python": [
+    "3.11",
+    "3.12",
+    "3.13"
+  ]
+}

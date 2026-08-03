@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "minimal": {
+      "version": "1.6.0",
+      "description": "Minimal continuity files for small projects",
+      "source": "skill/bootstrap/templates/minimal"
+    },
+    "standard": {
+      "version": "1.7.0",
+      "description": "Planning, reporting, tracking, decisions, and acceptance state",
+      "source": "skill/bootstrap/templates/standard",
+      "extends": [
+        "minimal"
+      ]
+    }
+  }
+}

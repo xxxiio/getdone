@@ -1,0 +1,968 @@
+{
+  "catalogue_version": "3.0.0",
+  "entries": [
+    {
+      "id": "component.caching",
+      "kind": "shared-component",
+      "title": "Caching Boundary",
+      "status": "stable",
+      "summary": "Make cache keys, freshness, invalidation, ownership, and failure behaviour explicit at a stable boundary.",
+      "path": "skill/references/shared-components/caching.md",
+      "tags": [
+        "cache",
+        "performance",
+        "freshness",
+        "invalidation"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Repeated reads are expensive and staleness is acceptable.",
+        "Cache identity and invalidation rules can be defined precisely.",
+        "The system can measure hit rate and stale data risk."
+      ],
+      "avoid_when": [
+        "Correctness requires immediately current state.",
+        "No evidence shows repeated work is a bottleneck.",
+        "Invalidation ownership is unclear."
+      ],
+      "related": [
+        "workflow.performance.measurement-first"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.configuration",
+      "kind": "shared-component",
+      "title": "Configuration Boundary",
+      "status": "stable",
+      "summary": "Load, validate, and expose configuration through one explicit boundary rather than scattering environment and file access across domain code.",
+      "path": "skill/references/shared-components/configuration.md",
+      "tags": [
+        "configuration",
+        "validation",
+        "dependency-injection"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Multiple modules need the same validated settings.",
+        "Configuration sources or precedence rules must remain consistent.",
+        "Tests need to supply configuration without mutating process-wide state."
+      ],
+      "avoid_when": [
+        "A program has only one or two immutable constants.",
+        "A wrapper would merely rename direct standard-library access without adding policy."
+      ],
+      "related": [
+        "pattern.dependency-injection",
+        "component.validation",
+        "example.configuration-boundary"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.data-access",
+      "kind": "shared-component",
+      "title": "Data Access Boundary",
+      "status": "stable",
+      "summary": "Isolate persistence protocols, queries, transactions, and mapping from domain decisions.",
+      "path": "skill/references/shared-components/data-access.md",
+      "tags": [
+        "persistence",
+        "repository",
+        "transactions"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Domain behaviour should not depend on a database client.",
+        "Multiple storage implementations or tests need a stable port.",
+        "Transaction and consistency rules need one owner."
+      ],
+      "avoid_when": [
+        "A thin script performs one obvious query with no domain layer.",
+        "A repository abstraction would only mirror every table operation."
+      ],
+      "related": [
+        "pattern.repository",
+        "decision.repository-vs-adapter"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.logging",
+      "kind": "shared-component",
+      "title": "Structured Logging",
+      "status": "stable",
+      "summary": "Provide consistent structured events, context propagation, and redaction without coupling domain logic to one logging vendor.",
+      "path": "skill/references/shared-components/logging.md",
+      "tags": [
+        "logging",
+        "observability",
+        "redaction"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Multiple components need consistent fields and correlation identifiers.",
+        "Operational diagnosis depends on machine-readable events.",
+        "Sensitive data must be redacted centrally."
+      ],
+      "avoid_when": [
+        "A small command-line tool only needs direct user-facing output.",
+        "The wrapper would hide useful standard logging APIs without adding policy."
+      ],
+      "related": [
+        "workflow.bug-fix.incident-response"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.plugin-system",
+      "kind": "shared-component",
+      "title": "Plugin System Boundary",
+      "status": "stable",
+      "summary": "Support explicit extension points with versioned contracts, controlled discovery, isolation, and lifecycle management.",
+      "path": "skill/references/shared-components/plugin-system.md",
+      "tags": [
+        "plugins",
+        "extensions",
+        "compatibility"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Independent teams or deployments need optional capabilities.",
+        "Extension contracts are stable enough to version.",
+        "Loading and trust boundaries can be controlled."
+      ],
+      "avoid_when": [
+        "Only one implementation exists and internal composition is sufficient.",
+        "Plugins would bypass ownership, security, or release controls.",
+        "The contract changes faster than consumers can follow."
+      ],
+      "related": [
+        "pattern.adapter",
+        "pattern.factory"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.retry",
+      "kind": "shared-component",
+      "title": "Retry and Backoff Policy",
+      "status": "stable",
+      "summary": "Centralise retry classification, bounded backoff, jitter, cancellation, and observability for transient failures.",
+      "path": "skill/references/shared-components/retry.md",
+      "tags": [
+        "retry",
+        "backoff",
+        "transient-failure",
+        "resilience"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A remote or concurrent operation has documented transient failure modes.",
+        "Several callers need the same retry budget and telemetry.",
+        "Idempotency and cancellation semantics are understood."
+      ],
+      "avoid_when": [
+        "The operation is not idempotent and cannot be safely deduplicated.",
+        "The failure is deterministic or indicates invalid input.",
+        "Retries would amplify overload or hide a durable outage."
+      ],
+      "related": [
+        "example.retry-policy",
+        "pattern.strategy"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.testing-utilities",
+      "kind": "shared-component",
+      "title": "Testing Utilities",
+      "status": "stable",
+      "summary": "Share deterministic fixtures, fakes, builders, clocks, and assertions that encode stable testing semantics rather than incidental implementation.",
+      "path": "skill/references/shared-components/testing-utilities.md",
+      "tags": [
+        "testing",
+        "fixtures",
+        "determinism"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Several test suites need the same domain-valid setup.",
+        "Time, identifiers, or external boundaries need deterministic control.",
+        "A helper reduces duplication without hiding important test intent."
+      ],
+      "avoid_when": [
+        "A helper makes tests read like a private programming language.",
+        "It couples tests to internal structure or broad mutable fixtures.",
+        "Only one test needs the behaviour."
+      ],
+      "related": [
+        "workflow.feature.tdd",
+        "pattern.builder"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "component.validation",
+      "kind": "shared-component",
+      "title": "Validation Boundary",
+      "status": "stable",
+      "summary": "Convert untrusted or weakly typed input into validated domain values at system boundaries.",
+      "path": "skill/references/shared-components/validation.md",
+      "tags": [
+        "validation",
+        "input",
+        "domain-boundary"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "The same input rules apply across multiple entry points.",
+        "Domain code should operate on already-valid values.",
+        "Errors need stable machine-readable structure."
+      ],
+      "avoid_when": [
+        "The validation is a single local invariant already enforced by the type system.",
+        "A shared validator would couple unrelated domain concepts."
+      ],
+      "related": [
+        "component.configuration",
+        "pattern.builder"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "decision.core-vs-organisation-overlay",
+      "kind": "decision-record",
+      "title": "Core Contribution versus Organisation Overlay",
+      "status": "stable",
+      "summary": "Choose whether reusable guidance belongs in the shared core registry or a namespace-owned organisation overlay.",
+      "path": "skill/references/decisions/core-vs-organisation-overlay.md",
+      "tags": [
+        "governance",
+        "overlay",
+        "contribution"
+      ],
+      "languages": [
+        "any",
+        "typescript"
+      ],
+      "use_when": [
+        "A reusable internal practice or component contract may be contributed to the shared registry."
+      ],
+      "avoid_when": [
+        "The decision is only about mutable state for one consuming project."
+      ],
+      "related": [
+        "decision.shared-component-promotion",
+        "example.organisation-catalogue-overlay"
+      ],
+      "aliases": [],
+      "introduced_in": "0.7.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "decision.factory-vs-direct-construction",
+      "kind": "decision-record",
+      "title": "Factory or Direct Construction",
+      "status": "stable",
+      "summary": "Choose a factory only when object selection or coordinated construction policy should be hidden from callers.",
+      "path": "skill/references/decisions/factory-vs-direct-construction.md",
+      "tags": [
+        "factory",
+        "object-creation",
+        "complexity"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A design choice matches the question described by this decision record."
+      ],
+      "avoid_when": [
+        "The documented alternatives do not match the actual source of variation or ownership."
+      ],
+      "related": [
+        "pattern.factory"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "decision.repository-vs-adapter",
+      "kind": "decision-record",
+      "title": "Repository or Adapter",
+      "status": "stable",
+      "summary": "Choose a repository for domain-oriented persistence and an adapter for broader protocol translation.",
+      "path": "skill/references/decisions/repository-vs-adapter.md",
+      "tags": [
+        "repository",
+        "adapter",
+        "persistence"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A design choice matches the question described by this decision record."
+      ],
+      "avoid_when": [
+        "The documented alternatives do not match the actual source of variation or ownership."
+      ],
+      "related": [
+        "pattern.repository",
+        "pattern.adapter",
+        "component.data-access"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "decision.shared-component-promotion",
+      "kind": "decision-record",
+      "title": "Promote a Shared Component",
+      "status": "stable",
+      "summary": "Decide whether repeated project code has compatible semantics and sufficient ownership to become a shared component.",
+      "path": "skill/references/decisions/shared-component-promotion.md",
+      "tags": [
+        "reuse",
+        "ownership",
+        "versioning"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A design choice matches the question described by this decision record."
+      ],
+      "avoid_when": [
+        "The documented alternatives do not match the actual source of variation or ownership."
+      ],
+      "related": [
+        "component.configuration",
+        "component.testing-utilities"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "decision.strategy-vs-function",
+      "kind": "decision-record",
+      "title": "Strategy or Function",
+      "status": "stable",
+      "summary": "Choose between a strategy type and a first-class function based on state, lifecycle, operations, and public-contract needs.",
+      "path": "skill/references/decisions/strategy-vs-function.md",
+      "tags": [
+        "strategy",
+        "functions",
+        "complexity"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A design choice matches the question described by this decision record."
+      ],
+      "avoid_when": [
+        "The documented alternatives do not match the actual source of variation or ownership."
+      ],
+      "related": [
+        "pattern.strategy"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "example.configuration-boundary",
+      "kind": "worked-example",
+      "title": "Typed Configuration Boundary",
+      "status": "stable",
+      "summary": "Worked example replacing scattered environment reads with immutable validated configuration at the composition root.",
+      "path": "skill/references/examples/reuse-intelligence/configuration-boundary.md",
+      "tags": [
+        "configuration",
+        "validation",
+        "dependency-injection"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A concrete example would clarify the related component or pattern decision."
+      ],
+      "avoid_when": [
+        "The example assumptions differ materially from the consuming system."
+      ],
+      "related": [
+        "component.configuration",
+        "pattern.dependency-injection"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "example.explicit-state-machine",
+      "kind": "worked-example",
+      "title": "Explicit Job Lifecycle",
+      "status": "stable",
+      "summary": "Worked example replacing interacting booleans with tested event-driven state transitions.",
+      "path": "skill/references/examples/reuse-intelligence/explicit-state-machine.md",
+      "tags": [
+        "state-machine",
+        "lifecycle",
+        "concurrency"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A concrete example would clarify the related component or pattern decision."
+      ],
+      "avoid_when": [
+        "The example assumptions differ materially from the consuming system."
+      ],
+      "related": [
+        "pattern.state-machine"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "example.organisation-catalogue-overlay",
+      "kind": "worked-example",
+      "title": "Organisation Catalogue Overlay Example",
+      "status": "stable",
+      "summary": "Demonstrate a namespace-owned catalogue extension with validation and explicit search loading.",
+      "path": "skill/references/examples/organisation-catalogue-overlay/README.md",
+      "tags": [
+        "overlay",
+        "organisation",
+        "registry"
+      ],
+      "languages": [
+        "any",
+        "typescript"
+      ],
+      "use_when": [
+        "An organisation needs private or internal reuse guidance beside the shared core catalogue."
+      ],
+      "avoid_when": [
+        "The proposed guidance is broadly reusable and suitable for the core repository."
+      ],
+      "related": [
+        "decision.core-vs-organisation-overlay"
+      ],
+      "aliases": [],
+      "introduced_in": "0.7.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "example.retry-policy",
+      "kind": "worked-example",
+      "title": "Bounded Retry Policy",
+      "status": "stable",
+      "summary": "Worked example replacing nested ad hoc retries with one deadline-aware transient-failure policy.",
+      "path": "skill/references/examples/reuse-intelligence/retry-policy.md",
+      "tags": [
+        "retry",
+        "backoff",
+        "resilience"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A concrete example would clarify the related component or pattern decision."
+      ],
+      "avoid_when": [
+        "The example assumptions differ materially from the consuming system."
+      ],
+      "related": [
+        "component.retry",
+        "pattern.strategy"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.adapter",
+      "kind": "design-pattern",
+      "title": "Adapter",
+      "status": "stable",
+      "summary": "Translate an external or incompatible interface into a boundary owned by the consuming system.",
+      "path": "skill/references/design-patterns/adapter.md",
+      "tags": [
+        "boundary",
+        "translation",
+        "anti-corruption-layer"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "An external API or legacy interface should not leak through domain code.",
+        "Several callers need one stable translation boundary."
+      ],
+      "avoid_when": [
+        "The wrapper merely renames every method one-for-one.",
+        "The external interface is already the intended public contract."
+      ],
+      "related": [
+        "decision.repository-vs-adapter",
+        "component.plugin-system"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.builder",
+      "kind": "design-pattern",
+      "title": "Builder",
+      "status": "stable",
+      "summary": "Construct a complex value through readable, validated steps while keeping invalid intermediate state controlled.",
+      "path": "skill/references/design-patterns/builder.md",
+      "tags": [
+        "construction",
+        "validation",
+        "test-data"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Construction has many optional values, ordering rules, or validation constraints.",
+        "Tests benefit from clear domain-valid defaults."
+      ],
+      "avoid_when": [
+        "A constructor or named factory with a few fields is clearer.",
+        "The builder duplicates setters without enforcing meaning."
+      ],
+      "related": [
+        "component.validation",
+        "component.testing-utilities"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.command",
+      "kind": "design-pattern",
+      "title": "Command",
+      "status": "stable",
+      "summary": "Represent an action as data so execution, queuing, auditing, retries, or undo can be handled explicitly.",
+      "path": "skill/references/design-patterns/command.md",
+      "tags": [
+        "execution",
+        "messaging",
+        "audit"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Actions cross an asynchronous, transactional, or audited boundary.",
+        "Execution policy should be separate from request creation."
+      ],
+      "avoid_when": [
+        "A direct function call is synchronous and sufficient.",
+        "Command objects would only add boilerplate around local calls."
+      ],
+      "related": [
+        "pattern.state-machine"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.dependency-injection",
+      "kind": "design-pattern",
+      "title": "Dependency Injection",
+      "status": "stable",
+      "summary": "Supply collaborators explicitly at construction or call boundaries so lifecycle and substitution remain visible.",
+      "path": "skill/references/design-patterns/dependency-injection.md",
+      "tags": [
+        "construction",
+        "lifecycle",
+        "testing"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "A component has infrastructure collaborators or multiple implementations.",
+        "Tests need deterministic substitutes without global mutation."
+      ],
+      "avoid_when": [
+        "A service locator or container would hide ownership.",
+        "Simple pure functions have no collaborators to inject."
+      ],
+      "related": [
+        "component.configuration"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.factory",
+      "kind": "design-pattern",
+      "title": "Factory",
+      "status": "stable",
+      "summary": "Centralise object selection or construction policy when callers should not know concrete creation details.",
+      "path": "skill/references/design-patterns/factory.md",
+      "tags": [
+        "object-creation",
+        "selection",
+        "lifecycle"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Construction varies by configuration, environment, or capability.",
+        "Creation requires coordinated dependencies or validation."
+      ],
+      "avoid_when": [
+        "Direct construction is stable and obvious.",
+        "The factory only forwards arguments to one constructor."
+      ],
+      "related": [
+        "decision.factory-vs-direct-construction",
+        "component.plugin-system"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.repository",
+      "kind": "design-pattern",
+      "title": "Repository",
+      "status": "stable",
+      "summary": "Expose persistence operations in domain terms while isolating storage protocols and mapping.",
+      "path": "skill/references/design-patterns/repository.md",
+      "tags": [
+        "persistence",
+        "domain-boundary",
+        "transactions"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Domain logic needs a stable persistence port.",
+        "Storage implementations or test substitutes vary."
+      ],
+      "avoid_when": [
+        "The abstraction mirrors tables or generic CRUD without domain meaning.",
+        "A one-off data script has no durable domain boundary."
+      ],
+      "related": [
+        "component.data-access",
+        "decision.repository-vs-adapter"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.state-machine",
+      "kind": "design-pattern",
+      "title": "State Machine",
+      "status": "stable",
+      "summary": "Model allowed states, events, guards, and transitions explicitly when lifecycle behaviour is non-trivial.",
+      "path": "skill/references/design-patterns/state-machine.md",
+      "tags": [
+        "lifecycle",
+        "transitions",
+        "concurrency"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Illegal transitions must be prevented and explained.",
+        "Concurrent or long-lived workflows have observable lifecycle states."
+      ],
+      "avoid_when": [
+        "There are only two obvious states with no transition rules.",
+        "A large framework obscures a small enum and match statement."
+      ],
+      "related": [
+        "example.explicit-state-machine",
+        "pattern.command"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.strategy",
+      "kind": "design-pattern",
+      "title": "Strategy",
+      "status": "stable",
+      "summary": "Encapsulate a real algorithm or policy variation behind an explicit interchangeable contract.",
+      "path": "skill/references/design-patterns/strategy.md",
+      "tags": [
+        "policy",
+        "algorithm",
+        "substitution"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "Callers select among multiple policies with the same purpose.",
+        "The variation changes independently from orchestration."
+      ],
+      "avoid_when": [
+        "Only one implementation exists and no external seam requires variation.",
+        "A function parameter or simple callable is clearer."
+      ],
+      "related": [
+        "decision.strategy-vs-function",
+        "component.retry"
+      ],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    },
+    {
+      "id": "pattern.visitor",
+      "kind": "design-pattern",
+      "title": "Visitor",
+      "status": "stable",
+      "summary": "Add operations across a stable heterogeneous structure without distributing each operation across every element type.",
+      "path": "skill/references/design-patterns/visitor.md",
+      "tags": [
+        "traversal",
+        "operations",
+        "heterogeneous-data"
+      ],
+      "languages": [
+        "any",
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ],
+      "use_when": [
+        "The data structure is stable while operations grow independently.",
+        "Double dispatch or exhaustive traversal provides clear ownership."
+      ],
+      "avoid_when": [
+        "Element types change frequently.",
+        "Pattern matching or ordinary polymorphism is simpler."
+      ],
+      "related": [],
+      "aliases": [],
+      "introduced_in": "0.6.0",
+      "deprecated_in": null,
+      "replaced_by": null
+    }
+  ],
+  "schema_version": 2
+}

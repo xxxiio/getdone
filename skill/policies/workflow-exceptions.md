@@ -1,0 +1,25 @@
+---
+id: policy.workflow-exceptions
+version: 1.0.0
+status: stable
+---
+# Workflow Exceptions
+
+## Applies when
+A required workflow step is inapplicable, impossible, unsafe, or disproportionate to the
+change risk.
+
+## Required action
+1. Name the skipped step before claiming completion.
+2. State why it cannot or should not be performed.
+3. Provide alternative validation where possible.
+4. Assess residual risk and create a follow-up TODO when the gap remains material.
+5. Mark the related acceptance gate `waived`, `not-applicable`, or `not-run`; do not mark it
+   `pass` without evidence.
+
+## Required evidence
+Record the skipped step, reason, alternative evidence, gate status, owner, and follow-up.
+
+## Exceptions
+No exception may conceal a failed check, known destructive-update risk, data-loss issue,
+or security blocker.

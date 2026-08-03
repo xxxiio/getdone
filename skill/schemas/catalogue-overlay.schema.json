@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/catalogue-overlay.schema.json",
+  "title": "Organisation catalogue overlay",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "overlay_version",
+    "organisation",
+    "namespace",
+    "entries",
+    "workflows"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "overlay_version": {"$ref": "#/$defs/semver"},
+    "organisation": {"type": "string", "minLength": 1},
+    "namespace": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "entries": {"type": "array", "items": {"$ref": "#/$defs/entry"}},
+    "workflows": {"type": "array", "items": {"$ref": "#/$defs/workflow"}}
+  },
+  "$defs": {
+    "semver": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "entryId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"
+    },
+    "workflowId": {
+      "type": "string",
+      "pattern": "^workflow(?:\\.[a-z][a-z0-9-]*)+$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.md$"
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "lifecycle": {
+      "type": "object",
+      "properties": {
+        "aliases": {"type": "array", "uniqueItems": true},
+        "introduced_in": {"$ref": "#/$defs/semver"},
+        "deprecated_in": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/semver"}]},
+        "replaced_by": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/entryId"}]}
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "kind", "title", "status", "summary", "path", "tags", "languages",
+        "use_when", "avoid_when", "related", "aliases", "introduced_in",
+        "deprecated_in", "replaced_by"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/entryId"},
+        "kind": {
+          "enum": ["shared-component", "design-pattern", "decision-record", "worked-example"]
+        },
+        "title": {"type": "string", "minLength": 1},
+        "status": {"enum": ["draft", "experimental", "stable", "deprecated", "retired"]},
+        "summary": {"type": "string", "minLength": 20},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "tags": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "languages": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "use_when": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "avoid_when": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "related": {"$ref": "#/$defs/stringArray"},
+        "aliases": {
+          "type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/entryId"}
+        },
+        "introduced_in": {"$ref": "#/$defs/semver"},
+        "deprecated_in": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/semver"}]},
+        "replaced_by": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/entryId"}]}
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "title", "status", "path", "summary", "tags", "languages", "aliases",
+        "introduced_in", "deprecated_in", "replaced_by"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/workflowId"},
+        "title": {"type": "string", "minLength": 1},
+        "status": {"enum": ["draft", "experimental", "stable", "deprecated", "retired"]},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "summary": {"type": "string", "minLength": 20},
+        "tags": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "languages": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "aliases": {
+          "type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/workflowId"}
+        },
+        "introduced_in": {"$ref": "#/$defs/semver"},
+        "deprecated_in": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/semver"}]},
+        "replaced_by": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/workflowId"}]}
+      }
+    }
+  }
+}

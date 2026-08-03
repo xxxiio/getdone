@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/getdone/bootstrap-template-frontmatter.schema.json",
+  "title": "Bootstrap template front matter",
+  "type": "object",
+  "required": ["template", "template_version", "project_owned"],
+  "properties": {
+    "template": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "template_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "project_owned": {"const": true},
+    "template_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": true
+}

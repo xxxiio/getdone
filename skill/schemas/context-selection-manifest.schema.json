@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/getdone/context-selection-manifest.schema.json",
+  "title": "Context Selection Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_class",
+    "primary_language",
+    "languages",
+    "workflow",
+    "documents",
+    "conditional_documents",
+    "approximate_tokens",
+    "selection_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "task_class": {
+      "enum": [
+        "feature",
+        "bug-fix",
+        "refactoring",
+        "investigation",
+        "project-planning",
+        "execution-planning"
+      ]
+    },
+    "workflow": {
+      "type": "string",
+      "minLength": 1
+    },
+    "documents": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "conditional_documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "condition",
+          "path"
+        ],
+        "properties": {
+          "condition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "approximate_tokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "selection_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "primary_language": {
+      "enum": [
+        "python",
+        "q-kdbplus",
+        "cpp",
+        "rust",
+        "dart-flutter",
+        "typescript"
+      ]
+    },
+    "languages": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "python",
+          "q-kdbplus",
+          "cpp",
+          "rust",
+          "dart-flutter",
+          "typescript"
+        ]
+      }
+    }
+  }
+}
