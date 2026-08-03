@@ -1,10 +1,10 @@
 # Package naming
 
-GetDone is the product name. Install the Python distribution named `get-done`, then
+GetDone is the product name. Install the Python distribution named `getdone-dev`, then
 use the `getdone` command and `getdone` Python import package.
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 getdone --version
 ```
 
@@ -14,10 +14,10 @@ namespace. The stable naming contract is:
 | Surface | Name |
 |---|---|
 | Product | GetDone |
-| PyPI distribution | `get-done` |
+| PyPI distribution | `getdone-dev` |
 | CLI | `getdone` and `getdone-*` |
 | Python import | `getdone` |
 | Project state | `.agent/` |
 
-Maintainers must not publish under the unrelated existing `getdone` distribution or create
-punctuation variants that are confusing under Python package-name normalisation.
+Maintainers must not publish under the unrelated existing `getdone` distribution or an
+unavailable separator variant.

@@ -1,5 +1,7 @@
 # GetDone
 See [Repository usage](docs/usage.md) for adoption and maintainer instructions.
+Read the hosted [GetDone documentation](https://getdonedev.xlatom.com/distribution/) for installation and distribution guidance.
+Install the published Python package from [PyPI](https://pypi.org/project/getdone-dev/).
 
 
 An agent-neutral, Markdown-first development workflow pack with optional Python tooling.

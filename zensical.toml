@@ -40,9 +40,13 @@ nav = [
 ]
 
 [project.theme]
+custom_dir = "site_docs/overrides"
 features = [
   "navigation.tabs",
   "navigation.sections",
   "search.highlight",
   "content.code.copy",
 ]
+
+[project.extra]
+generator = false

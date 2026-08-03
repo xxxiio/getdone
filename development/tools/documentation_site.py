@@ -41,10 +41,10 @@ def _workflow_pages(root: Path) -> list[GeneratedPage]:
     registry = _load_json(root, "skill/registry/workflows.json")
     workflows = sorted(registry["workflows"], key=lambda item: item["id"])
     index_lines = [
-        GENERATED_NOTICE,
         _frontmatter("Workflows", "Executable development procedures selected by the workflow router.", ["catalogue", "workflows"]),
+        GENERATED_NOTICE,
         "# Workflows\n",
-        "Workflows define the procedure an agent follows. The router selects one primary workflow and adds specialist workflows only when their trigger applies.\n",
+        "Workflows define the procedure an agent follows. The router selects one primary workflow and adds specialist workflows only when their trigger applies.\n\n",
         "| Workflow | Purpose | Status |\n|---|---|---|\n",
     ]
     pages: list[GeneratedPage] = []
@@ -57,8 +57,8 @@ def _workflow_pages(root: Path) -> list[GeneratedPage]:
         aliases = ", ".join(f"`{alias}`" for alias in item.get("aliases", [])) or "None"
         tags = ", ".join(f"`{tag}`" for tag in item.get("tags", [])) or "None"
         body = (
-            GENERATED_NOTICE
-            + _frontmatter(item["title"], item["summary"], ["workflow", *item.get("tags", [])])
+            _frontmatter(item["title"], item["summary"], ["workflow", *item.get("tags", [])])
+            + GENERATED_NOTICE
             + f"# {item['title']}\n\n"
             + f"**Stable ID:** `{item['id']}`  \n"
             + f"**Status:** `{item['status']}`  \n"
@@ -88,8 +88,8 @@ def _reuse_pages(root: Path) -> list[GeneratedPage]:
     for entry in entries:
         by_kind.setdefault(entry["kind"], []).append(entry)
     index = [
-        GENERATED_NOTICE,
         _frontmatter("Reusable skills", "Reusable components, patterns, decisions, and references.", ["catalogue", "reuse"]),
+        GENERATED_NOTICE,
         "# Reusable skills\n\n",
         "These entries help agents reuse established boundaries and patterns instead of inventing new ones.\n",
     ]
@@ -107,8 +107,8 @@ def _reuse_pages(root: Path) -> list[GeneratedPage]:
             related = ", ".join(f"`{value}`" for value in entry.get("related", [])) or "None"
             languages = ", ".join(f"`{value}`" for value in entry.get("languages", []))
             body = (
-                GENERATED_NOTICE
-                + _frontmatter(entry["title"], entry["summary"], ["reuse", entry["kind"], *entry.get("tags", [])])
+                _frontmatter(entry["title"], entry["summary"], ["reuse", entry["kind"], *entry.get("tags", [])])
+                + GENERATED_NOTICE
                 + f"# {entry['title']}\n\n"
                 + f"**Stable ID:** `{entry['id']}`  \n"
                 + f"**Kind:** `{entry['kind']}`  \n"
@@ -153,8 +153,8 @@ def _source_content_page(
         )
         metadata = "## Template metadata\n\n| Field | Value |\n|---|---|\n" + metadata_rows + "\n"
     body = (
-        GENERATED_NOTICE
-        + _frontmatter(title, description, ["catalogue", "source-content"])
+        _frontmatter(title, description, ["catalogue", "source-content"])
+        + GENERATED_NOTICE
         + f"# {title}\n\n"
         + f"Authoritative source: `{rel}`\n\n"
         + metadata
@@ -193,8 +193,8 @@ def _content_inventory_pages(
         link = content_page.relative_path.relative_to(Path(relative_path).parent).as_posix()
         rows.append(f"| [{heading}]({link}) | `{rel}` |\n")
     body = (
-        GENERATED_NOTICE
-        + _frontmatter(title, description, ["catalogue"])
+        _frontmatter(title, description, ["catalogue"])
+        + GENERATED_NOTICE
         + f"# {title}\n\n{description} Each item links to a rendered preview and its complete source.\n\n"
         + "| Item | Authoritative source |\n|---|---|\n"
         + "".join(rows)
@@ -202,33 +202,45 @@ def _content_inventory_pages(
     return [GeneratedPage(Path(relative_path), body), *pages]
 
 
-def _simple_inventory_page(root: Path, title: str, description: str, source_glob: str, relative_path: str) -> GeneratedPage:
+def _json_content_inventory_pages(
+    root: Path, title: str, description: str, source_glob: str, relative_path: str, destination_root: str
+) -> list[GeneratedPage]:
     rows: list[str] = []
+    pages: list[GeneratedPage] = []
     for path in sorted(root.glob(source_glob)):
-        if path.name.lower() in {"readme.md", "index.md"}:
-            continue
         rel = path.relative_to(root).as_posix()
-        heading = next(
-            (line.removeprefix("# ").strip() for line in path.read_text(encoding="utf-8").splitlines() if line.startswith("# ")),
-            path.stem.replace("-", " ").title(),
+        source = path.read_text(encoding="utf-8")
+        payload = json.loads(source)
+        heading = str(payload.get("title") or path.stem.removesuffix(".schema").replace("-", " ").title())
+        content_page = GeneratedPage(
+            Path(destination_root) / f"{_source_slug(path.relative_to(root))}.md",
+            _frontmatter(heading, f"Machine-readable source for {rel}.", ["catalogue", "schema"])
+            + GENERATED_NOTICE
+            + f"# {heading}\n\n"
+            + f"Authoritative source: `{rel}`\n\n"
+            + "## Complete source\n\n```json\n"
+            + source.rstrip()
+            + "\n```\n",
         )
-        rows.append(f"| {heading} | `{rel}` |\n")
+        pages.append(content_page)
+        link = content_page.relative_path.relative_to(Path(relative_path).parent).as_posix()
+        rows.append(f"| [{heading}]({link}) | `{rel}` |\n")
     body = (
-        GENERATED_NOTICE
-        + _frontmatter(title, description, ["catalogue"])
-        + f"# {title}\n\n{description}\n\n"
+        _frontmatter(title, description, ["catalogue"])
+        + GENERATED_NOTICE
+        + f"# {title}\n\n{description} Each item links to its complete source.\n\n"
         + "| Item | Authoritative source |\n|---|---|\n"
         + "".join(rows)
     )
-    return GeneratedPage(Path(relative_path), body)
+    return [GeneratedPage(Path(relative_path), body), *pages]
 
 
 def _cli_page(root: Path) -> GeneratedPage:
     contracts = _load_json(root, "skill/contracts/public-contracts.json")
     rows = "".join(f"| `{command}` | Installed console entry point |\n" for command in contracts["cli_commands"])
     body = (
-        GENERATED_NOTICE
-        + _frontmatter("CLI reference", "Installed commands and their stable public contract.", ["reference", "cli"])
+        _frontmatter("CLI reference", "Installed commands and their stable public contract.", ["reference", "cli"])
+        + GENERATED_NOTICE
         + "# CLI reference\n\n"
         + "All commands use exit code `0` for success, `1` for validation or operational failure, and `2` for command-line usage errors.\n\n"
         + "| Command | Purpose |\n|---|---|\n"
@@ -241,6 +253,7 @@ def _cli_page(root: Path) -> GeneratedPage:
 def _catalogue_home() -> GeneratedPage:
     body = (
         _frontmatter("Skills catalogue", "Browse workflows, reusable skills, standards, policies, templates, adapters, and schemas.", ["catalogue"])
+        + GENERATED_NOTICE
         + "# Skills catalogue\n\n"
         + "The catalogue is generated from authoritative registries and repository inventories. Generated pages must not be edited directly.\n\n"
         + "- [Workflows](workflows/index.md): executable development procedures.\n"
@@ -260,11 +273,11 @@ def generate_pages(root: Path) -> list[GeneratedPage]:
     pages.extend(_reuse_pages(root))
     pages.extend(
         [
-            _simple_inventory_page(root, "Language standards", "Engineering standards selected by implementation language.", "skill/standards/languages/*.md", "catalogue/languages.md"),
-            _simple_inventory_page(root, "Policies", "Mandatory policies loaded when their trigger applies.", "skill/policies/*.md", "catalogue/policies.md"),
+            *_content_inventory_pages(root, "Language standards", "Engineering standards selected by implementation language.", "skill/standards/languages/*.md", "catalogue/languages.md", "catalogue/language-content"),
+            *_content_inventory_pages(root, "Policies", "Mandatory policies loaded when their trigger applies.", "skill/policies/*.md", "catalogue/policies.md", "catalogue/policy-content"),
             *_content_inventory_pages(root, "Templates", "Bootstrap and governance templates copied or instantiated by projects.", "skill/**/templates/**/*.md", "catalogue/templates.md", "catalogue/template-content"),
             *_content_inventory_pages(root, "Adapters", "Guidance and managed files for supported coding-agent environments.", "skill/adapters/*.md", "catalogue/adapters.md", "catalogue/adapter-content"),
-            _simple_inventory_page(root, "Schemas", "JSON schemas that define machine-readable public contracts.", "skill/schemas/*.json", "catalogue/schemas.md"),
+            *_json_content_inventory_pages(root, "Schemas", "JSON schemas that define machine-readable public contracts.", "skill/schemas/*.json", "catalogue/schemas.md", "catalogue/schema-content"),
         ]
     )
     return pages

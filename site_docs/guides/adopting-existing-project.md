@@ -46,7 +46,7 @@ For most existing projects:
 ## Bootstrap
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 
 getdone init \
   --project-root /path/to/repository \

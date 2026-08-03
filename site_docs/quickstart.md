@@ -7,7 +7,7 @@ keep mutable project state in `.agent/`.
 
 ```bash
 git submodule add <approved-skills-repository-url> .getdone
-git -C .getdone checkout v1.0.0-rc.9
+git -C .getdone checkout v1.0.0
 ```
 
 Treat `.getdone/` as read-only during ordinary application development.
@@ -17,7 +17,7 @@ Treat `.getdone/` as read-only during ordinary application development.
 From the consuming project's Python environment:
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 ```
 
 The wheel or editable package contains tooling only. Canonical guidance remains in

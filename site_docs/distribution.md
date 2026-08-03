@@ -37,7 +37,7 @@ A submodule gives the consuming project an explicit skills commit:
 
 ```bash
 git submodule add <approved-repository-url> .getdone
-git -C .getdone checkout v1.0.0-rc.9
+git -C .getdone checkout v1.0.0
 
 python .getdone/getdone/initialise_project.py \
   --project-root . \
@@ -59,8 +59,8 @@ Use the product-only archive when consuming environments do not need repository 
 benchmarks, rollout fixtures, or maintainer documentation:
 
 ```bash
-unzip getdone-skill-pack-1.0.0-rc.9.zip -d /opt/getdone
-python -m pip install get_done-1.0.0rc9-py3-none-any.whl
+unzip getdone-skill-pack-1.0.0.zip -d /opt/getdone
+python -m pip install getdone_dev-1.0.0-py3-none-any.whl
 getdone-lock --project-root /work/example --skills-root /opt/getdone
 ```
 
@@ -71,7 +71,7 @@ The archive contains `VERSION` and `skill/` only.
 Install the tooling wheel, then point commands at the shared content:
 
 ```bash
-python -m pip install get_done-1.0.0rc9-py3-none-any.whl
+python -m pip install getdone_dev-1.0.0-py3-none-any.whl
 
 getdone-init \
   --project-root /work/example \
