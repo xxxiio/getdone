@@ -66,7 +66,8 @@ def strip_template_digest(text: str) -> str:
         for line in raw.splitlines()
         if not line.startswith(f"{_DIGEST_KEY}:")
     ]
-    return f"---\n{'\n'.join(retained)}\n---\n{body}"
+    retained_frontmatter = "\n".join(retained)
+    return f"---\n{retained_frontmatter}\n---\n{body}"
 
 
 def calculate_template_digest(text: str) -> str:
@@ -93,7 +94,8 @@ def add_template_digest(text: str) -> str:
         len(lines),
     )
     lines.insert(insert_at, f'{_DIGEST_KEY}: "{digest}"')
-    return f"---\n{'\n'.join(lines)}\n---\n{body}"
+    rendered_frontmatter = "\n".join(lines)
+    return f"---\n{rendered_frontmatter}\n---\n{body}"
 
 
 def verify_template_digest(text: str) -> bool:
