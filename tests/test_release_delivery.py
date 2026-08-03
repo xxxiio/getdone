@@ -51,6 +51,9 @@ class ReleaseDeliveryTests(unittest.TestCase):
             self.assertIn(phrase, ci)
         for phrase in (
             '--tag "${GITHUB_REF_NAME}"',
+            "Fetch annotated release tag",
+            '"refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"',
+            'git cat-file -t "${GITHUB_REF_NAME}"',
             "Build skill-pack and checksums",
             "sha256sum *.whl *.tar.gz *.zip",
             "twine upload --non-interactive dist/*.whl dist/*.tar.gz",

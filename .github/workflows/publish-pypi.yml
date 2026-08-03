@@ -23,6 +23,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch annotated release tag
+        shell: bash
+        run: |
+          git fetch --force origin \
+            "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"
+          if [[ "$(git cat-file -t "${GITHUB_REF_NAME}")" != "tag" ]]; then
+            echo "::error::Release ref ${GITHUB_REF_NAME} is not an annotated tag."
+            exit 1
+          fi
+
       - name: Verify tag points to main HEAD
         shell: bash
         run: |
