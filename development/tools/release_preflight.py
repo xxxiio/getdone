@@ -122,7 +122,7 @@ def run_preflight(root: Path, *, skip_site: bool = False) -> int:
                 print("FAIL metadata fallback: wheel METADATA is missing or ambiguous", file=sys.stderr)
                 return 1
             text = archive.read(metadata[0]).decode("utf-8")
-            if "Name: get-done" not in text or f"Version: {version}" not in text:
+            if "Name: getdone-dev" not in text or f"Version: {version}" not in text:
                 print("FAIL metadata fallback: unexpected distribution name or version", file=sys.stderr)
                 return 1
         print("WARN Twine is unavailable; direct wheel metadata inspection passed")

@@ -45,7 +45,7 @@ class ContributionTemplateTests(unittest.TestCase):
 
     def test_package_naming_contract_is_documented(self) -> None:
         text = (ROOT / "docs" / "package-naming.md").read_text(encoding="utf-8")
-        self.assertIn("get-done", text)
+        self.assertIn("getdone-dev", text)
         self.assertIn("getdone` distribution name is already occupied", text)
         self.assertIn("import getdone", text)
         nav = (ROOT / "zensical.toml").read_text(encoding="utf-8")

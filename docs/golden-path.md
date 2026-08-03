@@ -5,7 +5,7 @@ This tutorial shows the intended GetDone lifecycle without loading the whole ski
 ## 1. Install and diagnose
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 getdone --version
 getdone doctor --project-root . --skills-root /path/to/getdone-skill-pack
 ```

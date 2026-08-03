@@ -17,7 +17,7 @@ Treat `.getdone/` as read-only during ordinary application development.
 From the consuming project's Python environment:
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 ```
 
 The wheel or editable package contains tooling only. Canonical guidance remains in

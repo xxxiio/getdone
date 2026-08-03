@@ -60,7 +60,7 @@ benchmarks, rollout fixtures, or maintainer documentation:
 
 ```bash
 unzip getdone-skill-pack-1.0.0.zip -d /opt/getdone
-python -m pip install get_done-1.0.0-py3-none-any.whl
+python -m pip install getdone_dev-1.0.0-py3-none-any.whl
 getdone-lock --project-root /work/example --skills-root /opt/getdone
 ```
 
@@ -71,7 +71,7 @@ The archive contains `VERSION` and `skill/` only.
 Install the tooling wheel, then point commands at the shared content:
 
 ```bash
-python -m pip install get_done-1.0.0-py3-none-any.whl
+python -m pip install getdone_dev-1.0.0-py3-none-any.whl
 
 getdone-init \
   --project-root /work/example \

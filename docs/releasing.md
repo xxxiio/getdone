@@ -79,7 +79,7 @@ credentials are used.
 
 Create a protected GitHub Environment named `pypi`, then configure this environment secret:
 
-- `PYPI_API_TOKEN`: a PyPI API token authorised to upload the `get-done` distribution.
+- `PYPI_API_TOKEN`: a PyPI API token authorised to upload the `getdone-dev` distribution.
 
 Restrict the `pypi` environment to protected release tags and configure a repository ruleset
 that protects the `v*` tag namespace. Optional required reviewers provide an additional manual

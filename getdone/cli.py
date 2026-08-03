@@ -29,7 +29,7 @@ app = typer.Typer(
 
 def _version() -> str:
     try:
-        return importlib.metadata.version("get-done")
+        return importlib.metadata.version("getdone-dev")
     except importlib.metadata.PackageNotFoundError:
         version_file = repository_root() / "VERSION"
         return version_file.read_text(encoding="utf-8").strip() if version_file.is_file() else "unknown"

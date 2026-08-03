@@ -28,8 +28,8 @@ Detailed pre-release development history remains available in Git history and
 
 - Tightened recurring workflow evidence by task class, made language standards explicitly impact-scoped, consolidated overlapping core structural guidance, and made all change-type waiver evidence explicit.
 - Context selection now supports polyglot tasks by accepting repeated `--language` options and loading one standard for each materially affected language.
-- Documented the stable naming contract: GetDone product, `get-done` PyPI distribution, and `getdone` CLI/import namespace.
-- The public product identity is GetDone, distributed as `get-done` and invoked
+- Documented the stable naming contract: GetDone product, `getdone-dev` PyPI distribution, and `getdone` CLI/import namespace.
+- The public product identity is GetDone, distributed as `getdone-dev` and invoked
   through the `getdone` command.
 - Pre-1.0 release-candidate migration notes and granular changelog entries were
   removed from the public release surface. Public compatibility history begins with

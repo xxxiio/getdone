@@ -31,7 +31,7 @@ must not claim those files were written or validated locally.
 Install the released wheel or use a trusted checkout:
 
 ```bash
-python -m pip install get_done-<version>-py3-none-any.whl
+python -m pip install getdone_dev-<version>-py3-none-any.whl
 ```
 
 Keep the product-only skill pack at a stable local path or internal distribution URL.

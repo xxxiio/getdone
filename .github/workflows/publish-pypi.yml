@@ -107,7 +107,7 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: python -m twine upload --non-interactive dist/*.whl dist/*.tar.gz
+        run: python -m twine upload --non-interactive --verbose dist/*.whl dist/*.tar.gz
 
       - name: Create GitHub release with verified artifacts
         env:

@@ -93,10 +93,10 @@ loaded only when records are created or materially updated, not during ordinary 
 
 ## Install and start
 
-Install the GetDone CLI from the `get-done` PyPI distribution:
+Install the GetDone CLI from the `getdone-dev` PyPI distribution:
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 getdone --version
 ```
 

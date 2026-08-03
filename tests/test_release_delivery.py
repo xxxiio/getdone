@@ -28,15 +28,15 @@ class ReleaseDeliveryTests(unittest.TestCase):
     def test_checksum_manifest_covers_artifacts_but_not_itself(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             dist = Path(directory)
-            (dist / "get_done-1.2.3-py3-none-any.whl").write_bytes(b"wheel")
-            (dist / "get_done-1.2.3.tar.gz").write_bytes(b"source")
+            (dist / "getdone_dev-1.2.3-py3-none-any.whl").write_bytes(b"wheel")
+            (dist / "getdone_dev-1.2.3.tar.gz").write_bytes(b"source")
 
             manifest = _write_checksums(dist, "1.2.3")
 
             lines = manifest.read_text(encoding="utf-8").splitlines()
             self.assertEqual(2, len(lines))
-            self.assertTrue(any(line.endswith("get_done-1.2.3-py3-none-any.whl") for line in lines))
-            self.assertTrue(any(line.endswith("get_done-1.2.3.tar.gz") for line in lines))
+            self.assertTrue(any(line.endswith("getdone_dev-1.2.3-py3-none-any.whl") for line in lines))
+            self.assertTrue(any(line.endswith("getdone_dev-1.2.3.tar.gz") for line in lines))
             self.assertFalse(any(manifest.name in line for line in lines))
 
     def test_hosted_workflows_build_and_publish_complete_artifact_sets(self) -> None:
@@ -54,9 +54,10 @@ class ReleaseDeliveryTests(unittest.TestCase):
             "Fetch annotated release tag",
             '"refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}"',
             'git cat-file -t "${GITHUB_REF_NAME}"',
+            "twine upload --non-interactive --verbose",
             "Build skill-pack and checksums",
             "sha256sum *.whl *.tar.gz *.zip",
-            "twine upload --non-interactive dist/*.whl dist/*.tar.gz",
+            "twine upload --non-interactive --verbose dist/*.whl dist/*.tar.gz",
             "gh release create",
         ):
             self.assertIn(phrase, publish)

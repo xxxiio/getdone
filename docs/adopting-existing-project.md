@@ -53,7 +53,7 @@ Do not block productive work until every optional record is complete.
 Install the tooling:
 
 ```bash
-python -m pip install get-done
+python -m pip install getdone-dev
 ```
 
 Keep a version-pinned, read-only copy of the product skill pack in a stable location, for example:
