@@ -106,7 +106,7 @@ class ProjectRecordContractTests(unittest.TestCase):
     def test_completed_milestone_requires_checked_criteria_and_evidence(self) -> None:
         block = _milestone("MILESTONE-0001", "completed", "EC-001")
         block = block.replace(
-            "- EC-001: `python -m unittest tests.test_project_record_contracts`",
+            "- EC-001: `python -m pytest tests/test_project_record_contracts.py`",
             "- EC-001: not available",
         )
         roadmap = _roadmap(milestones=(block,), current="null")
@@ -346,7 +346,7 @@ def _milestone(identifier: str, status: str, exit_criterion: str) -> str:
 
 #### Evidence
 
-- {exit_criterion}: `python -m unittest tests.test_project_record_contracts`
+- {exit_criterion}: `python -m pytest tests/test_project_record_contracts.py`
 
 #### Next milestone
 
@@ -421,7 +421,7 @@ It resolves a confirmed rollout blocker before v1.0.
 ## Validation
 
 ```bash
-python -m unittest tests.test_project_record_contracts
+python -m pytest tests/test_project_record_contracts.py
 ```
 
 ## Stop conditions

@@ -147,7 +147,7 @@ python development/scripts/validate_frontmatter.py --repository-root .
 python -m development.tools.validate_skill_content --repository-root .
 getdone-validate-records --project-root /path/to/project --skills-root .
 python development/scripts/generate_indexes.py --repository-root .
-python -m unittest discover -s tests
+python -m pytest
 ```
 
 ## Release status

@@ -7,6 +7,7 @@ import json
 import os
 import shutil
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 from typing import Annotated
 
@@ -15,6 +16,11 @@ import typer
 from getdone import context_selection, project_records
 from getdone.initialise_project import initialise_project, repository_root
 from getdone.planning_prompts import planning_prompt
+from getdone.project_agent import (
+    ProjectAgentError,
+    select_project_agent,
+    validate_project_agent,
+)
 from getdone.project_status import project_status_summary, render_project_status
 from getdone.validate_project import validate_project
 
@@ -25,6 +31,17 @@ app = typer.Typer(
     add_completion=False,
     suggest_commands=True,
 )
+project_agent_app = typer.Typer(
+    help="Inspect and validate the optional .project-agent project extension.",
+    no_args_is_help=True,
+)
+app.add_typer(project_agent_app, name="project-agent")
+
+
+class ProjectAgentDoctorMode(str, Enum):
+    auto = "auto"
+    required = "required"
+    off = "off"
 
 
 def _version() -> str:
@@ -148,9 +165,28 @@ def validate_command(
 def context_command(
     task_class: Annotated[str, typer.Option(help="Task class, such as feature or bug-fix.")],
     language: Annotated[
-        list[str],
-        typer.Option("--language", help="Affected implementation language; repeat as needed."),
-    ],
+        list[str] | None,
+        typer.Option(
+            "--language",
+            help="Explicit affected language; repeat as needed. Changed paths are also inferred.",
+        ),
+    ] = None,
+    project_root: Annotated[
+        Path,
+        typer.Option(help="Consuming project root used to discover .project-agent/."),
+    ] = Path.cwd(),
+    changed_path: Annotated[
+        list[str] | None,
+        typer.Option("--changed-path", help="Affected project path; repeat as needed."),
+    ] = None,
+    concern: Annotated[
+        list[str] | None,
+        typer.Option("--concern", help="Project-defined concern; repeat as needed."),
+    ] = None,
+    no_project_agent: Annotated[
+        bool,
+        typer.Option(help="Disable .project-agent discovery for this context selection."),
+    ] = False,
     skills_root: Annotated[Path | None, typer.Option(help="Skill-pack root.")] = None,
     json_output: Annotated[bool, typer.Option("--json", help="Emit JSON.")] = False,
 ) -> None:
@@ -159,14 +195,96 @@ def context_command(
     argv = [
         "--repository-root",
         str(_skills_root(skills_root)),
+        "--project-root",
+        str(project_root),
         "--task-class",
         task_class,
     ]
-    for item in language:
+    for item in language or ():
         argv.extend(["--language", item])
+    for item in changed_path or ():
+        argv.extend(["--changed-path", item])
+    for item in concern or ():
+        argv.extend(["--concern", item])
+    if no_project_agent:
+        argv.append("--no-project-agent")
     if json_output:
         argv.append("--json")
     _exit(context_selection.main(argv))
+
+
+@project_agent_app.command("validate")
+def project_agent_validate_command(
+    project_root: Annotated[
+        Path,
+        typer.Option(help="Project directory containing .project-agent/."),
+    ] = Path.cwd(),
+) -> None:
+    """Validate the project-specific agent extension."""
+
+    report = validate_project_agent(project_root.resolve())
+    if not report.exists:
+        typer.echo("error: .project-agent/ not found", err=True)
+        raise typer.Exit(1)
+    for finding in report.errors:
+        typer.echo(f"error: {finding.path}: {finding.message}", err=True)
+    for finding in report.warnings:
+        typer.echo(f"warning: {finding.path}: {finding.message}")
+    if report.errors:
+        raise typer.Exit(1)
+    tokens = report.baseline_tokens if report.baseline_tokens is not None else 0
+    typer.echo(
+        f"project-agent valid: baseline~{tokens} tokens; "
+        f"{report.rule_count} rule(s); {report.inference_count} inference rule(s); "
+        f"{report.referenced_files} referenced file(s); "
+        f"{len(report.warnings)} warning(s)"
+    )
+
+
+@project_agent_app.command("inspect")
+def project_agent_inspect_command(
+    project_root: Annotated[
+        Path,
+        typer.Option(help="Project directory containing .project-agent/."),
+    ] = Path.cwd(),
+    changed_path: Annotated[
+        list[str] | None,
+        typer.Option("--changed-path", help="Affected project path; repeat as needed."),
+    ] = None,
+    concern: Annotated[
+        list[str] | None,
+        typer.Option("--concern", help="Explicit project concern; repeat as needed."),
+    ] = None,
+    language: Annotated[
+        list[str] | None,
+        typer.Option("--language", help="Explicit affected language; repeat as needed."),
+    ] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit JSON.")] = False,
+) -> None:
+    """Show inferred concerns, languages, and selected project guidance."""
+
+    try:
+        selection = select_project_agent(
+            project_root.resolve(),
+            changed_paths=changed_path or (),
+            explicit_concerns=concern or (),
+            explicit_languages=language or (),
+        )
+    except ProjectAgentError as exc:
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    if selection is None:
+        typer.echo("error: .project-agent/ not found", err=True)
+        raise typer.Exit(1)
+    if json_output:
+        typer.echo(json.dumps(selection.to_dict(), indent=2, sort_keys=True))
+        return
+    typer.echo(f"languages: {', '.join(selection.affected_languages) or 'none'}")
+    typer.echo(f"concerns: {', '.join(selection.concerns) or 'none'}")
+    typer.echo(f"matched rules: {', '.join(selection.matched_rules) or 'none'}")
+    typer.echo(f"approximate tokens: {selection.approximate_tokens}")
+    for document in selection.documents:
+        typer.echo(document)
 
 
 @app.command("planning-prompt")
@@ -224,7 +342,11 @@ class DoctorCheck:
     blocking: bool = False
 
 
-def _doctor_checks(project_root: Path, skills_root: Path) -> list[DoctorCheck]:
+def _doctor_checks(
+    project_root: Path,
+    skills_root: Path,
+    project_agent_mode: ProjectAgentDoctorMode = ProjectAgentDoctorMode.auto,
+) -> list[DoctorCheck]:
     checks: list[DoctorCheck] = []
     checks.append(DoctorCheck("GetDone installation", "pass", _version()))
     skill_ok = (skills_root / "skill/workflow-router.md").is_file() and (
@@ -257,6 +379,64 @@ def _doctor_checks(project_root: Path, skills_root: Path) -> list[DoctorCheck]:
                 "project is not bootstrapped" if not (project_root / ".agent").is_dir() else "skill pack unavailable",
             )
         )
+    if project_agent_mode is ProjectAgentDoctorMode.off:
+        checks.append(
+            DoctorCheck("Project agent extension", "skip", "disabled by --project-agent off")
+        )
+    else:
+        project_agent_report = validate_project_agent(project_root)
+        if not project_agent_report.exists:
+            required = project_agent_mode is ProjectAgentDoctorMode.required
+            checks.append(
+                DoctorCheck(
+                    "Project agent extension",
+                    "fail" if required else "warn",
+                    ".project-agent/ not found",
+                    blocking=required,
+                )
+            )
+        else:
+            checks.append(
+                DoctorCheck(
+                    "Project agent extension",
+                    "pass" if project_agent_report.is_valid else "fail",
+                    (
+                        f"{project_agent_report.rule_count} rule(s); "
+                        f"{project_agent_report.inference_count} inference rule(s); "
+                        f"{project_agent_report.referenced_files} referenced file(s)"
+                    ),
+                    blocking=True,
+                )
+            )
+            tokens = project_agent_report.baseline_tokens or 0
+            baseline_warning = next(
+                (
+                    finding
+                    for finding in project_agent_report.warnings
+                    if finding.path.endswith("/AGENTS.md")
+                ),
+                None,
+            )
+            checks.append(
+                DoctorCheck(
+                    "Project agent baseline",
+                    "warn" if baseline_warning else "pass",
+                    f"AGENTS.md ~{tokens} tokens",
+                )
+            )
+            if project_agent_report.errors or project_agent_report.warnings:
+                detail = (
+                    f"{len(project_agent_report.errors)} error(s); "
+                    f"{len(project_agent_report.warnings)} warning(s)"
+                )
+                checks.append(
+                    DoctorCheck(
+                        "Project agent health",
+                        "fail" if project_agent_report.errors else "warn",
+                        detail,
+                        blocking=bool(project_agent_report.errors),
+                    )
+                )
     checks.append(
         DoctorCheck(
             "Git repository",
@@ -285,10 +465,20 @@ def doctor_command(
         typer.Option(help="Project directory to diagnose."),
     ] = Path.cwd(),
     skills_root: Annotated[Path | None, typer.Option(help="Skill-pack root.")] = None,
+    project_agent: Annotated[
+        ProjectAgentDoctorMode,
+        typer.Option(
+            help="Project-agent check mode: auto warns if absent, required fails, off skips."
+        ),
+    ] = ProjectAgentDoctorMode.auto,
 ) -> None:
-    """Diagnose installation, skill-pack, project, and optional tooling health."""
+    """Diagnose installation, skill-pack, project, project-agent, and optional tooling health."""
 
-    checks = _doctor_checks(project_root.resolve(), _skills_root(skills_root))
+    checks = _doctor_checks(
+        project_root.resolve(),
+        _skills_root(skills_root),
+        project_agent,
+    )
     width = max(len(check.name) for check in checks)
     for check in checks:
         typer.echo(f"{check.name:<{width}}  {check.status:<8}  {check.detail}")

@@ -13,10 +13,16 @@ from typing import Any, Iterable
 
 try:
     from getdone.frontmatter import parse_frontmatter
+    from getdone.project_agent import (
+        ProjectAgentError,
+        infer_affected_languages,
+        select_project_agent,
+    )
 except ModuleNotFoundError as exc:  # Direct execution from the tooling directory.
-    if exc.name not in {"getdone", "getdone.frontmatter"}:
+    if exc.name not in {"getdone", "getdone.frontmatter", "getdone.project_agent"}:
         raise
     from frontmatter import parse_frontmatter
+    from project_agent import ProjectAgentError, infer_affected_languages, select_project_agent
 
 TASK_WORKFLOWS = {
     "feature": "skill/workflows/feature/tdd-feature-development.md",
@@ -180,8 +186,32 @@ def build_parser() -> argparse.ArgumentParser:
         "--language",
         choices=sorted(LANGUAGES),
         action="append",
-        required=True,
-        help="Affected implementation language; repeat for polyglot changes.",
+        default=[],
+        help="Affected implementation language; repeat to add explicit languages. "
+        "When changed paths are supplied, GetDone also infers affected languages.",
+    )
+    parser.add_argument(
+        "--project-root",
+        type=Path,
+        default=Path.cwd(),
+        help="Consuming project root used to discover .project-agent/.",
+    )
+    parser.add_argument(
+        "--changed-path",
+        action="append",
+        default=[],
+        help="Affected project path; repeat for multi-file or polyglot changes.",
+    )
+    parser.add_argument(
+        "--concern",
+        action="append",
+        default=[],
+        help="Project-defined concern; repeat to augment .project-agent inference.",
+    )
+    parser.add_argument(
+        "--no-project-agent",
+        action="store_true",
+        help="Disable .project-agent discovery and selection for this command.",
     )
     parser.add_argument("--json", action="store_true", help="Emit the selection manifest as JSON.")
     return parser
@@ -189,14 +219,64 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    selection = select_context(args.repository_root, args.task_class, args.language)
+
+    project_selection = None
+    try:
+        if not args.no_project_agent:
+            project_selection = select_project_agent(
+                args.project_root,
+                changed_paths=args.changed_path,
+                explicit_concerns=args.concern,
+                explicit_languages=args.language,
+            )
+        languages = (
+            project_selection.affected_languages
+            if project_selection is not None
+            else infer_affected_languages(
+                args.changed_path,
+                explicit_languages=args.language,
+            )
+        )
+    except ProjectAgentError as exc:
+        raise SystemExit(str(exc)) from exc
+
+    if not languages:
+        raise SystemExit(
+            "at least one affected language is required; pass --language or --changed-path"
+        )
+
+    selection = select_context(args.repository_root, args.task_class, languages)
+
     if args.json:
-        print(json.dumps(selection.to_dict(), indent=2, sort_keys=True))
+        if project_selection is None:
+            print(json.dumps(selection.to_dict(), indent=2, sort_keys=True))
+        else:
+            print(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "core": selection.to_dict(),
+                        "project_agent": project_selection.to_dict(),
+                        "combined_approximate_tokens": (
+                            selection.approximate_tokens
+                            + project_selection.approximate_tokens
+                        ),
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
         return 0
+
     print(f"workflow: {selection.workflow}")
+    print(f"languages: {', '.join(selection.languages)}")
     print(f"approximate tokens: {selection.approximate_tokens}")
     for path in selection.documents:
         print(path)
+    if project_selection is not None:
+        print(f"project-agent tokens: {project_selection.approximate_tokens}")
+        for path in project_selection.documents:
+            print(path)
     return 0
 
 
