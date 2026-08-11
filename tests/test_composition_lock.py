@@ -31,7 +31,8 @@ class CompositionLockTests(unittest.TestCase):
             self.assertEqual(["minimal", "standard"], payload["profile"]["lineage"])
             self.assertEqual([], payload["overlays"])
             self.assertEqual(
-                "1.0.0", payload["core"]["version"]
+                (ROOT / "VERSION").read_text(encoding="utf-8").strip(),
+                payload["core"]["version"],
             )
             self.assertEqual("current", assess_lock(project, ROOT).status)
 

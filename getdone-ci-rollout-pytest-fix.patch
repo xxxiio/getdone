@@ -1,0 +1,44 @@
+# GetDone 1.1.0 CI follow-up: pytest rollout commands and version-safe lock assertion
+# Apply after the project-agent/pytest migration changes.
+#
+#   git apply --check getdone-ci-rollout-pytest-fix.patch
+#   git apply getdone-ci-rollout-pytest-fix.patch
+
+diff --git a/development/rollout/cases.json b/development/rollout/cases.json
+--- a/development/rollout/cases.json
++++ b/development/rollout/cases.json
+@@ -13,9 +13,7 @@
+       "test_command": [
+         "{python}",
+         "-m",
+-        "unittest",
+-        "discover",
+-        "-s",
++        "pytest",
+         "tests"
+       ],
+       "before_expected": "fail",
+@@ -47,9 +45,7 @@
+       "test_command": [
+         "{python}",
+         "-m",
+-        "unittest",
+-        "discover",
+-        "-s",
++        "pytest",
+         "tests"
+       ],
+       "before_expected": "pass",
+diff --git a/tests/test_composition_lock.py b/tests/test_composition_lock.py
+--- a/tests/test_composition_lock.py
++++ b/tests/test_composition_lock.py
+@@ -31,7 +31,8 @@
+             self.assertEqual(["minimal", "standard"], payload["profile"]["lineage"])
+             self.assertEqual([], payload["overlays"])
+             self.assertEqual(
+-                "1.0.0", payload["core"]["version"]
++                (ROOT / "VERSION").read_text(encoding="utf-8").strip(),
++                payload["core"]["version"],
+             )
+             self.assertEqual("current", assess_lock(project, ROOT).status)
+ 
