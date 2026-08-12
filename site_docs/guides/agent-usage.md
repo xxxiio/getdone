@@ -6,8 +6,10 @@ tags: ["guide", "agents", "codex", "chatgpt"]
 
 # Using GetDone with coding agents
 
-GetDone is a workflow and engineering-guidance layer around a coding agent. It does not
-replace the agent's repository exploration or implementation judgment.
+GetDone is a workflow and engineering-guidance layer around a coding agent. Bootstrap
+creates project state once; task and project are workflow modes that only determine which
+existing records the agent reads and writes. GetDone does not replace repository
+exploration or implementation judgment.
 
 ## Responsibility boundary
 
@@ -61,7 +63,20 @@ The runtime does not need to be committed to the application repository. A user-
 or centrally managed installation is usually cleaner. The consuming repository keeps
 its own `.project-agent/` when repository-specific guidance is required.
 
-## Codex implementation workflow
+## Choose the workflow mode
+
+**Task workflow** is for one bounded request. Read only relevant stable project facts,
+selected guidance, and historically relevant journal entries. Write the implementation,
+validation evidence, durable journal history, and durable decisions when warranted.
+Normally leave roadmap, current-task, plans, status, handoff, and next-step records
+untouched.
+
+**Project workflow** is for an ongoing goal spanning multiple tasks or sessions. Use the
+same implementation guidance and journal history, plus the applicable current, planning,
+evidence, status, reporting, and continuation records. Maintain
+`.agent/current/next-step.md` separately from the journal.
+
+## Codex task workflow
 
 Codex should inspect the repository normally before asking GetDone for guidance. Once it
 understands the likely scope, it passes the known or anticipated affected paths to
@@ -69,18 +84,24 @@ GetDone.
 
 Recommended prompt:
 
-> Use GetDone for workflow guidance and validation for this task. Independently inspect
-> the repository and decide which source files are relevant. Once you understand the
-> likely affected area, run `getdone guidance` with the appropriate task class,
-> `--project-root .`, and the known or anticipated affected paths. Read and follow the
-> returned generic and `.project-agent` guidance. Implement the change, run the
-> appropriate project tests/lint/build, and run the relevant GetDone validation before
-> finishing. If the implementation scope changes materially, re-evaluate the guidance.
+> Use GetDone in task workflow for this bounded change. Independently inspect the
+> repository and decide which source files are relevant. Once you understand the likely
+> affected area, run `getdone guidance` with the appropriate task class,
+> `--project-root .`, and the known or anticipated affected paths. Follow the returned
+> generic and `.project-agent` guidance, implement and validate the change, then journal
+> the completed work and durable findings. Do not create or update continuation state.
+> Do not load the full journal unless prior work is specifically relevant.
 
-Short form:
+## Codex project workflow
 
-> Use GetDone for this task. Use your own judgment to inspect and modify the relevant
-> source files; use GetDone for workflow/project guidance and validation.
+Recommended prompt:
+
+> Use GetDone in project workflow for this ongoing development goal. Maintain the existing
+> bootstrapped project state across iterations. Independently inspect the repository, use
+> `getdone guidance` for each bounded implementation task, follow applicable
+> `.project-agent` guidance, validate the work, journal completed work and durable
+> decisions, and keep applicable current/planning/next-step records accurate for
+> continuation.
 
 Typical loop:
 
@@ -175,7 +196,7 @@ getdone project-agent inspect \
 
 `inspect` explains why project guidance was selected. It is not a source-file selector.
 
-## Finish a coding task
+## Finish coding work
 
 Run the repository's own tests, static analysis, lint, builds, and platform-specific
 checks first. Then run the applicable GetDone checks:
@@ -185,8 +206,12 @@ getdone project-agent validate --project-root .
 getdone doctor --project-root .
 ```
 
-If the project uses bootstrapped `.agent/` records, also run the project-record
-validation required by the selected workflow.
+In task workflow, finish by writing durable journal history without creating a next-step
+obligation. In project workflow, journal the same history and separately maintain the
+current/evidence/status/next-step records required for continuation.
+
+If the project uses bootstrapped `.agent/` records, run the project-record validation
+required by the selected workflow.
 
 ## Preview the GetDone documentation
 

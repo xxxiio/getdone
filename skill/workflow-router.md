@@ -1,5 +1,22 @@
 # Workflow Router
 
+Select one primary implementation workflow before coding. Separately select the project
+state workflow mode; the mode changes record reads/writes, not bootstrap structure or the
+primary implementation workflow.
+
+## Project state workflow mode
+
+| Request shape | Mode | Record behaviour |
+|---|---|---|
+| One bounded request that can finish independently | task | Read only relevant stable/history state; write durable journal history; do not maintain continuation state |
+| Ongoing goal spanning multiple tasks or sessions | project | Read/write applicable current, planning, evidence, status, and continuation state; also write durable journal history |
+
+Task workflow may retrieve prior journal entries when the request or a durable decision
+makes them relevant, but it does not load project history wholesale. Project workflow uses
+`.agent/current/next-step.md` as the continuation authority.
+
+## Primary implementation workflow
+
 Select one primary workflow before implementation. Add a specialist workflow only when
 its trigger is present.
 
@@ -25,4 +42,4 @@ its trigger is present.
 
 When a request mixes categories, select the workflow that defines the acceptance risk.
 Example: a performance bug uses regression-first bug fixing plus the measurement-first
-workflow. Record the combination in the task plan.
+workflow. Record the combination in the task plan when project workflow is active.

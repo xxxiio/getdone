@@ -38,7 +38,7 @@ Keep the product-only skill pack at a stable local path or internal distribution
 
 ## Bootstrap a project
 
-Use the minimal profile for small projects and the standard profile for projects that need controlled planning, evidence, decisions, risks, and handoffs:
+Bootstrap is normally run once. Use the standard profile for the normal full GetDone project state; task/project workflow selection happens later and does not change bootstrap:
 
 ```bash
 getdone-init \
@@ -49,14 +49,28 @@ getdone-init \
 
 Bootstrap files under `.agent/` are project-owned. Edit those records in the project; do not edit shared `skill/` content to record project state.
 
+## Choose a project-state workflow
+
+Task and project differ only in which already-bootstrapped records the agent reads and
+writes.
+
+**Task workflow** is for one bounded request. Read applicable workflow/project guidance,
+stable project facts, and only historically relevant journal entries. Write the
+implementation, validation evidence, journal history, and durable decisions when needed.
+Normally leave current-task, roadmap, plans, status, handoff, and next-step records
+untouched.
+
+**Project workflow** is for an ongoing goal spanning multiple tasks or sessions. Use the
+same implementation guidance and journal history, plus the current, planning, evidence,
+status, reporting, and continuation records required by the active goal. Maintain
+`.agent/current/next-step.md` as the continuation authority.
+
 ## Start a task
 
 1. Verify the composition lock.
-2. Select one primary workflow and the language standards for every materially affected implementation surface.
-3. Update `.agent/current/task.md` with one bounded objective and binary acceptance criteria.
-4. Complete `.agent/current/change-impact.md`; use only `yes`, `no`, or `unknown` and activate every required specialist gate.
-5. Confirm the next step advances an active roadmap exit criterion.
-6. Load only the selected workflow, core standard, affected language standards, core acceptance, and applicable change gate.
+2. Let the coding agent inspect the repository and identify likely affected implementation surfaces.
+3. Select the project-state workflow mode and one primary implementation workflow.
+4. Load only the selected workflow, applicable standards/project guidance, and project records required by the chosen mode.
 
 
 Select a language because the task materially affects that implementation surface, not merely because the repository contains it. Material impact includes changed source files, public or FFI boundaries, shared schemas or generated bindings, packaging or deployment behaviour, and tests required in that language. Repeat `--language` for polyglot changes.
@@ -82,15 +96,16 @@ Follow the selected workflow and the project command reference. Use the declared
 
 Increase the tier for public APIs, persistence, dependencies, concurrency, security, deployment, or other broad impacts. Do not describe a check as passed unless the exact evidence is recorded.
 
-## Finish a task
+## Finish work
 
-1. Fill `.agent/current/evidence.md` from actual commands and artefacts.
-2. Evaluate acceptance gates and record skipped checks, waivers, and residual risks.
-3. Update affected project records only; do not rewrite the roadmap after every task.
-4. Preserve or update active invariants in `.agent/invariants.md`.
-5. Create the completion or handoff report required by the workflow.
-6. Define exactly one next deterministic step, or record a justified no-change outcome.
-7. Validate project records:
+In **task workflow**, run applicable repository validation, write a recorded journal entry
+with completed work and durable findings, and do not create continuation state merely to
+close the bounded request.
+
+In **project workflow**, also update applicable current/evidence/status/report records and
+define exactly one next deterministic step, or record a justified no-change outcome.
+
+Validate project records:
 
 ```bash
 getdone-validate-project \

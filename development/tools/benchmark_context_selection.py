@@ -21,7 +21,7 @@ COMMON_REQUIRED = (
     "skill/standards/core.md",
     "skill/acceptance/core.md",
 )
-PUBLISHED_REPORT = Path("development/benchmarks/context-selection/results/1.0.0.json")
+PUBLISHED_REPORT = Path("development/benchmarks/context-selection/results/1.1.0.json")
 RC1_AVERAGE_SELECTED_TOKENS = 4856
 
 

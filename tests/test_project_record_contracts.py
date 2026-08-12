@@ -20,6 +20,58 @@ class ProjectRecordContractTests(unittest.TestCase):
     def test_all_profile_record_templates_satisfy_contracts(self) -> None:
         self.assertEqual(validate_profile_record_templates(ROOT), [])
 
+    def test_recorded_journal_has_no_continuation_requirement(self) -> None:
+        text = """---
+template: journal-entry
+template_version: 2.1.0
+project_owned: true
+record_contract: journal-entry
+record_schema_version: 1
+status: recorded
+date: "2026-08-12"
+task_id: null
+---
+
+# Journal Entry: 2026-08-12 — Complete bounded task
+
+## Context
+
+One bounded task requested by the user.
+
+## Work completed
+
+- Completed the requested implementation.
+
+## Decisions made
+
+- Preserved the existing public API.
+
+## Files or components changed
+
+- `src/example.py`
+
+## Validation performed
+
+- `python -m pytest tests/test_example.py` passed.
+
+## Problems encountered
+
+- None.
+
+## Remaining work
+
+- None.
+
+## New TODOs
+
+- None.
+
+## Risks or blockers
+
+- None.
+"""
+        self.assertEqual(validate_record_text(text, ROOT), [])
+
     def test_fresh_standard_project_has_valid_draft_records(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "project"
