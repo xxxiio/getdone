@@ -13,7 +13,7 @@ It provides:
 - deterministic workflows for features, defects, migrations, incidents, refactoring, performance, documentation, and architecture;
 - language standards for Python, Rust, C++, Dart/Flutter, q/kdb+, and TypeScript;
 - controlled project records for tasks, milestones, next steps, impact, evidence, risks, decisions, and handoffs;
-- context selection that normally loads no more than six relevant guidance documents;
+- guidance selection that normally loads no more than six relevant guidance documents;
 - validators that prevent unsupported completion claims and stale generated catalogues.
 
 ## Start here
@@ -21,7 +21,8 @@ It provides:
 1. Read the [quick start](quickstart.md).
 2. Understand the [development lifecycle](concepts/development-lifecycle.md).
 3. Browse the [skills catalogue](catalogue/index.md).
-4. Use the [CLI reference](reference/cli.md) for exact commands.
+4. Read [Using GetDone with coding agents](guides/agent-usage.md) for Codex and ChatGPT workflows.
+5. Use the [CLI reference](reference/cli.md) for exact commands.
 
 ## Source-of-truth model
 

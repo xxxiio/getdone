@@ -8,6 +8,30 @@ The skills content and the Python tooling are separate distribution concerns:
 
 A consuming project should pin the resolved composition in `.agent/skills.lock.json` and control the shared checkout version it uses.
 
+## Recommended coding-agent bundle
+
+For Codex, CI, or another coding-agent environment that can execute local commands,
+take these artifacts from the **same GetDone release**:
+
+1. `getdone_dev-<version>-py3-none-any.whl` — executable CLI/tooling;
+2. `getdone-skill-pack-<version>.zip` — generic workflows, standards, and policies;
+3. `getdone-<version>-SHA256SUMS.txt` — integrity verification.
+
+The wheel and skill pack are complementary. The wheel does not embed the canonical
+workflow content, while the skill pack does not install the `getdone` command. Keep
+their versions aligned.
+
+A consuming repository may additionally contain `.project-agent/` for its own durable
+engineering guidance. That repository-specific content is separate from the GetDone
+release artifacts.
+
+A normal ChatGPT planning conversation does not need the wheel uploaded into the chat.
+Generate or resolve the relevant GetDone prompt/guidance locally, then supply that text
+to ChatGPT. If ChatGPT is running in a coding environment that can execute commands and
+access the repository, use the same wheel + skill-pack model as Codex.
+
+See [Using GetDone with coding agents](guides/agent-usage.md) for concrete workflows and prompts.
+
 ## Supported models
 
 | Model | Shared content location | Tooling | Best fit |
