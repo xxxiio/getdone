@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialise project-local agent state from a versioned bootstrap profile."""
+"""Initialise the canonical full project-local agent state."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ except ModuleNotFoundError as exc:  # Direct execution from the tooling director
     from profiles import collect_profile_templates, load_profiles, resolve_profile
 
 TEXT_SUFFIXES = {".md", ".json", ".yaml", ".yml", ".txt"}
-PUBLIC_BOOTSTRAP_PROFILE = "standard"
+BOOTSTRAP_PROFILE = "standard"
 
 
 @dataclass(frozen=True)
@@ -42,18 +42,6 @@ def repository_root() -> Path:
 
 def load_skills_version(root: Path) -> str:
     return (root / "VERSION").read_text(encoding="utf-8").strip()
-
-
-def validate_public_bootstrap_profile(profile: str) -> str:
-    """Require the canonical full-state profile for public project bootstrap."""
-
-    if profile != PUBLIC_BOOTSTRAP_PROFILE:
-        raise ValueError(
-            "new project bootstrap supports only the full "
-            f"'{PUBLIC_BOOTSTRAP_PROFILE}' profile; '{profile}' is an internal/legacy "
-            "profile layer"
-        )
-    return profile
 
 
 def render_text(text: str, values: dict[str, str]) -> str:
@@ -149,17 +137,9 @@ def initialise_project(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Create project-local .agent state from a shared bootstrap profile."
+        description="Create the canonical full project-local .agent state."
     )
-    parser.add_argument("--project-root", type=Path, required=True)
-    parser.add_argument(
-        "--profile",
-        default=PUBLIC_BOOTSTRAP_PROFILE,
-        help=(
-            "Bootstrap profile. Public project bootstrap supports only the full "
-            f"{PUBLIC_BOOTSTRAP_PROFILE!r} profile."
-        ),
-    )
+    parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument(
         "--skills-root",
         type=Path,
@@ -188,10 +168,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        profile = validate_public_bootstrap_profile(args.profile)
         result = initialise_project(
             args.project_root,
-            profile,
+            BOOTSTRAP_PROFILE,
             overwrite=args.overwrite,
             skills_root=args.skills_root,
             project_name=args.project_name,

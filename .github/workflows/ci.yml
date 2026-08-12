@@ -90,7 +90,7 @@ jobs:
           unzip -q dist/getdone-skill-pack-${{ github.sha }}.zip -d skill-pack-smoke
           (
             cd wheel-smoke
-            python -m getdone.cli init --project-root ../release-smoke-project --skills-root ../skill-pack-smoke --profile minimal
+            python -m getdone.cli init --project-root ../release-smoke-project --skills-root ../skill-pack-smoke
             python -m getdone.cli validate --project-root ../release-smoke-project --skills-root ../skill-pack-smoke
           )
       - name: Upload distributable artifacts

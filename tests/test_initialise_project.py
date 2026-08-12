@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from getdone.initialise_project import initialise_project, main as initialise_main
+from getdone.initialise_project import build_parser, initialise_project, main as initialise_main
 
 
 class InitialiseProjectTests(unittest.TestCase):
@@ -44,8 +44,6 @@ class InitialiseProjectTests(unittest.TestCase):
                 [
                     "--project-root",
                     str(project_root),
-                    "--profile",
-                    "standard",
                     "--skills-root",
                     str(Path(__file__).resolve().parents[1]),
                 ]
@@ -55,23 +53,11 @@ class InitialiseProjectTests(unittest.TestCase):
             self.assertTrue((project_root / ".agent" / "skills-reference.md").is_file())
             self.assertTrue((project_root / ".agent" / "tracking" / "todos.md").is_file())
 
-    def test_public_cli_rejects_internal_minimal_profile(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            project_root = Path(directory) / "cli-project"
+    def test_public_cli_defaults_project_root_and_hides_profile_option(self) -> None:
+        args = build_parser().parse_args([])
 
-            code = initialise_main(
-                [
-                    "--project-root",
-                    str(project_root),
-                    "--profile",
-                    "minimal",
-                    "--skills-root",
-                    str(Path(__file__).resolve().parents[1]),
-                ]
-            )
-
-            self.assertEqual(code, 1)
-            self.assertFalse((project_root / ".agent").exists())
+        self.assertEqual(Path.cwd(), args.project_root)
+        self.assertNotIn("--profile", build_parser().format_help())
 
 
 class TemplateRenderingTests(unittest.TestCase):
