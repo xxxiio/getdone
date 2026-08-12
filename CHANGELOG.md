@@ -5,6 +5,18 @@ All notable public changes to GetDone will be documented in this file.
 Detailed pre-release development history remains available in Git history and
 `docs/iterations/`; it is not a public migration contract.
 
+## 1.1.1 - 2026-08-12
+
+### Fixed
+
+- Python wheels now bundle the immutable `VERSION` and complete `skill/` runtime tree, and
+  installed commands automatically use those assets when no checkout or explicit skill
+  root is available.
+- Source distributions now include the complete `skill/` tree so wheels built from the
+  sdist retain the same self-contained runtime behavior.
+- CI and release publication verify every source `skill/` file is present in the wheel
+  and sdist, and smoke-test `doctor`, `init`, and `validate` without `--skills-root`.
+
 ## 1.1.0 - 2026-08-11
 
 ### Added

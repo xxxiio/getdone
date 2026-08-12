@@ -37,7 +37,18 @@ class InitResult:
 
 
 def repository_root() -> Path:
-    return Path(__file__).resolve().parents[1]
+    """Resolve the immutable GetDone skill root for source and installed runtimes."""
+
+    package_dir = Path(__file__).resolve().parent
+    checkout_root = package_dir.parent
+    if (checkout_root / "VERSION").is_file() and (checkout_root / "skill").is_dir():
+        return checkout_root
+
+    bundled_root = package_dir / "assets"
+    if (bundled_root / "VERSION").is_file() and (bundled_root / "skill").is_dir():
+        return bundled_root
+
+    return checkout_root
 
 
 def load_skills_version(root: Path) -> str:
@@ -143,7 +154,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--skills-root",
         type=Path,
-        help="Path to the shared skills repository. Defaults to the source checkout.",
+        help="Skill root override. Defaults to the checkout or bundled package assets.",
     )
     parser.add_argument("--project-name")
     parser.add_argument(
