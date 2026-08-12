@@ -15,7 +15,7 @@ Authoritative source: `skill/bootstrap/templates/minimal/AGENTS.md`
 |---|---|
 | `project_owned` | `True` |
 | `template` | `project-agents` |
-| `template_version` | `1.2.0` |
+| `template_version` | `1.3.0` |
 
 ## Rendered preview
 
@@ -24,10 +24,16 @@ Authoritative source: `skill/bootstrap/templates/minimal/AGENTS.md`
 Before development:
 
 1. Read `.agent/skills-reference.md` and verify `.agent/skills.lock.json`.
-2. Read project context and the current next step.
-3. Read `skill/START-HERE.md` from the shared checkout.
-4. Classify the task and load only the selected five or six recurring documents.
-5. Keep plans, reports, decisions, and TODOs inside this project's `.agent/` directory.
+2. Read `skill/START-HERE.md` from the shared checkout.
+3. Classify the implementation through `skill/workflow-router.md`, including whether the
+   request uses task workflow or project workflow.
+4. Read project context required by the work.
+5. In task workflow, do not read or update the current next step unless the request
+   specifically depends on continuation state.
+6. In project workflow, read and maintain the current next step.
+7. Load only the selected recurring guidance and historically relevant journal entries.
+8. Keep project-owned history and continuation state inside this project's `.agent/`
+   directory.
 
 Treat the shared skill pack as read-only unless the task explicitly changes it.
 
@@ -39,7 +45,7 @@ shared skill pack. Run `getdone-validate-project` before claiming completion.
 ```markdown
 ---
 template: project-agents
-template_version: 1.2.0
+template_version: 1.3.0
 project_owned: true
 ---
 
@@ -48,10 +54,16 @@ project_owned: true
 Before development:
 
 1. Read `.agent/skills-reference.md` and verify `.agent/skills.lock.json`.
-2. Read project context and the current next step.
-3. Read `skill/START-HERE.md` from the shared checkout.
-4. Classify the task and load only the selected five or six recurring documents.
-5. Keep plans, reports, decisions, and TODOs inside this project's `.agent/` directory.
+2. Read `skill/START-HERE.md` from the shared checkout.
+3. Classify the implementation through `skill/workflow-router.md`, including whether the
+   request uses task workflow or project workflow.
+4. Read project context required by the work.
+5. In task workflow, do not read or update the current next step unless the request
+   specifically depends on continuation state.
+6. In project workflow, read and maintain the current next step.
+7. Load only the selected recurring guidance and historically relevant journal entries.
+8. Keep project-owned history and continuation state inside this project's `.agent/`
+   directory.
 
 Treat the shared skill pack as read-only unless the task explicitly changes it.
 

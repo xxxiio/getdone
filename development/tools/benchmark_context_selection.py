@@ -21,8 +21,15 @@ COMMON_REQUIRED = (
     "skill/standards/core.md",
     "skill/acceptance/core.md",
 )
-PUBLISHED_REPORT = Path("development/benchmarks/context-selection/results/1.0.0.json")
+PUBLISHED_REPORTS_DIR = Path("development/benchmarks/context-selection/results")
 RC1_AVERAGE_SELECTED_TOKENS = 4856
+
+
+def _published_report_path(root: Path) -> Path:
+    version = (root / "VERSION").read_text(encoding="utf-8").strip()
+    if not version:
+        raise ValueError("VERSION is empty")
+    return root / PUBLISHED_REPORTS_DIR / f"{version}.json"
 
 
 def _baseline_documents(root: Path) -> tuple[str, ...]:
@@ -108,11 +115,11 @@ def run_benchmark(root: Path) -> dict[str, Any]:
 
 def validate_published_report(root: Path) -> list[str]:
     expected = run_benchmark(root)
-    path = root / PUBLISHED_REPORT
     try:
+        path = _published_report_path(root)
         published = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        return [f"{path.relative_to(root)}: {exc}"]
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return [f"development/benchmarks/context-selection/results: {exc}"]
     if published != expected:
         return [f"{path.relative_to(root)}: published benchmark report is stale"]
     if not expected["tooling_justified"]:

@@ -54,9 +54,22 @@ entire contract.
 Reopening a completed milestone, task, or final report requires explicit human approval and
 an explanation in a new journal entry. Do not silently move it backwards.
 
-## Operational lifecycle
+## Project-state workflow modes
 
-For one bounded iteration, update records in this order:
+Bootstrap is mode-agnostic: it establishes the complete project state once. Task and
+project are workflow modes that control which existing records are read and written.
+
+**Task workflow** normally uses only relevant stable project facts and historical memory.
+It records completed work in the journal and does not maintain current-task, roadmap,
+planning, status, handoff, or next-step state merely to close a bounded request.
+
+**Project workflow** additionally reads and updates the current, planning, evidence,
+status, reporting, and continuation records required by an ongoing goal.
+`.agent/current/next-step.md` is the continuation authority.
+
+## Project-workflow operational lifecycle
+
+For one bounded project-workflow iteration, update records in this order:
 
 1. Define or revise the next deterministic step and its milestone exit criteria.
 2. Make the current task ready or active with scope, acceptance criteria, and validation.
@@ -166,7 +179,9 @@ Acceptance is evidence, not narrative confidence.
 ## Journal, decisions, waivers, and registers
 
 - Journal entries are dated, append-only historical evidence. Corrections are appended and
-  identified; prior facts are not silently replaced.
+  identified; prior facts are not silently replaced. They never own continuation state.
+  Task workflow has no next-step obligation; project workflow stores continuation in
+  separate current-state records.
 - ADRs record one durable choice, alternatives, consequences, and validation. Accepted
   ADRs are changed only through supersession or deprecation.
 - Waivers require an exact requirement, concrete risk, compensating control, owner,

@@ -21,6 +21,11 @@ binary criteria, evidence, and valid cross-record references.
 
 ## Initialise
 
+Bootstrap is a one-time repository setup concern. The normal `standard` profile creates
+the full GetDone project-state structure up front, whether or not a later request uses
+every record. Task versus project is selected later at workflow time and does not change
+the bootstrapped filesystem.
+
 ```bash
 getdone-init \
   --project-root /path/to/project \

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "contract_version": "1.2.0",
+  "contract_version": "1.3.0",
   "records": {
     "project-context": {
       "templates": [
@@ -421,7 +421,7 @@
         "journal-entry"
       ],
       "kind": "repeatable",
-      "authority": "Append-only historical evidence for one dated iteration",
+      "authority": "Append-only historical evidence for one dated iteration; continuation state is stored separately",
       "statuses": [
         "draft",
         "recorded"
@@ -448,8 +448,7 @@
         "Problems encountered",
         "Remaining work",
         "New TODOs",
-        "Risks or blockers",
-        "Resulting next deterministic step"
+        "Risks or blockers"
       ],
       "section_rules": {
         "Context": "text",
@@ -460,8 +459,7 @@
         "Problems encountered": "bullet-list",
         "Remaining work": "bullet-list",
         "New TODOs": "bullet-list",
-        "Risks or blockers": "bullet-list",
-        "Resulting next deterministic step": "text"
+        "Risks or blockers": "bullet-list"
       }
     },
     "task-completion-report": {

@@ -67,8 +67,6 @@ class UmbrellaCliTests(unittest.TestCase):
                     str(project),
                     "--skills-root",
                     str(ROOT),
-                    "--profile",
-                    "minimal",
                 ],
             )
             self.assertEqual(0, init_result.exit_code, init_result.stdout)
@@ -84,6 +82,13 @@ class UmbrellaCliTests(unittest.TestCase):
             )
             self.assertEqual(0, validate_result.exit_code, validate_result.stdout)
 
+    def test_init_defaults_project_root_and_hides_profile_option(self) -> None:
+        result = RUNNER.invoke(app, ["init", "--help"])
+
+        self.assertEqual(0, result.exit_code, result.output)
+        self.assertNotIn("--profile", result.output)
+        self.assertNotIn("required", result.output.lower())
+
     def test_status_reports_authoritative_current_records_as_json(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "project"
@@ -95,8 +100,6 @@ class UmbrellaCliTests(unittest.TestCase):
                     str(project),
                     "--skills-root",
                     str(ROOT),
-                    "--profile",
-                    "standard",
                 ],
             )
             self.assertEqual(0, initialise_result.exit_code, initialise_result.stdout)

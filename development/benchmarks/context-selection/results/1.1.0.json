@@ -1,0 +1,117 @@
+{
+  "average_selected_tokens": 3829,
+  "average_token_reduction": 0.9175,
+  "baseline_documents": 134,
+  "baseline_tokens": 46390,
+  "benchmark_cases": 9,
+  "cases": [
+    {
+      "id": "python-feature",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3910,
+      "token_reduction": 0.9157
+    },
+    {
+      "id": "rust-feature",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3843,
+      "token_reduction": 0.9172
+    },
+    {
+      "id": "python-bug-fix",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3867,
+      "token_reduction": 0.9166
+    },
+    {
+      "id": "cpp-bug-fix",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3858,
+      "token_reduction": 0.9168
+    },
+    {
+      "id": "python-refactoring",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3866,
+      "token_reduction": 0.9167
+    },
+    {
+      "id": "dart-refactoring",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3862,
+      "token_reduction": 0.9167
+    },
+    {
+      "id": "q-investigation",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 4,
+      "route_correct": true,
+      "selected_documents": 5,
+      "selected_tokens": 3684,
+      "token_reduction": 0.9206
+    },
+    {
+      "id": "rust-investigation",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 4,
+      "route_correct": true,
+      "selected_documents": 5,
+      "selected_tokens": 3615,
+      "token_reduction": 0.9221
+    },
+    {
+      "id": "typescript-feature",
+      "missed_acceptance_gates": [],
+      "missing_documents": [],
+      "product_only": true,
+      "required_documents": 5,
+      "route_correct": true,
+      "selected_documents": 6,
+      "selected_tokens": 3953,
+      "token_reduction": 0.9148
+    }
+  ],
+  "maximum_selected_documents": 6,
+  "minimum_token_reduction": 0.9148,
+  "missed_acceptance_gates": 0,
+  "reduction_vs_rc1_selected_context": 0.2116,
+  "required_document_recall": 1.0,
+  "route_accuracy": 1.0,
+  "schema_version": 2,
+  "scope_note": "Static routing and document coverage; coding outcomes require dogfooding.",
+  "tooling_justified": true
+}

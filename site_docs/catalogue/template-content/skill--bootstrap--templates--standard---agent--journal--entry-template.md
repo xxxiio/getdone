@@ -20,7 +20,7 @@ Authoritative source: `skill/bootstrap/templates/standard/.agent/journal/ENTRY-T
 | `status` | `draft` |
 | `task_id` | `None` |
 | `template` | `journal-entry` |
-| `template_version` | `2.0.0` |
+| `template_version` | `2.1.0` |
 
 ## Rendered preview
 
@@ -62,16 +62,12 @@ Authoritative source: `skill/bootstrap/templates/standard/.agent/journal/ENTRY-T
 
 <!-- Bullet list of risk/blocker IDs, or `- None.` -->
 
-## Resulting next deterministic step
-
-<!-- NEXT ID and one exact objective. -->
-
 ## Complete source
 
 ```markdown
 ---
 template: journal-entry
-template_version: 2.0.0
+template_version: 2.1.0
 project_owned: true
 record_contract: journal-entry
 record_schema_version: 1
@@ -117,8 +113,4 @@ task_id: null
 ## Risks or blockers
 
 <!-- Bullet list of risk/blocker IDs, or `- None.` -->
-
-## Resulting next deterministic step
-
-<!-- NEXT ID and one exact objective. -->
 ```

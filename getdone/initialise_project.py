@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialise project-local agent state from a versioned bootstrap profile."""
+"""Initialise the canonical full project-local agent state."""
 
 from __future__ import annotations
 
@@ -27,6 +27,7 @@ except ModuleNotFoundError as exc:  # Direct execution from the tooling director
     from profiles import collect_profile_templates, load_profiles, resolve_profile
 
 TEXT_SUFFIXES = {".md", ".json", ".yaml", ".yml", ".txt"}
+BOOTSTRAP_PROFILE = "standard"
 
 
 @dataclass(frozen=True)
@@ -136,10 +137,9 @@ def initialise_project(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Create project-local .agent state from a shared bootstrap profile."
+        description="Create the canonical full project-local .agent state."
     )
-    parser.add_argument("--project-root", type=Path, required=True)
-    parser.add_argument("--profile", default="standard")
+    parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument(
         "--skills-root",
         type=Path,
@@ -170,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         result = initialise_project(
             args.project_root,
-            args.profile,
+            BOOTSTRAP_PROFILE,
             overwrite=args.overwrite,
             skills_root=args.skills_root,
             project_name=args.project_name,
