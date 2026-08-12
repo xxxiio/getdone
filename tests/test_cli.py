@@ -68,7 +68,7 @@ class UmbrellaCliTests(unittest.TestCase):
                     "--skills-root",
                     str(ROOT),
                     "--profile",
-                    "minimal",
+                    "standard",
                 ],
             )
             self.assertEqual(0, init_result.exit_code, init_result.stdout)
@@ -83,6 +83,26 @@ class UmbrellaCliTests(unittest.TestCase):
                 ],
             )
             self.assertEqual(0, validate_result.exit_code, validate_result.stdout)
+
+    def test_init_rejects_internal_minimal_profile(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory) / "project"
+            result = RUNNER.invoke(
+                app,
+                [
+                    "init",
+                    "--project-root",
+                    str(project),
+                    "--skills-root",
+                    str(ROOT),
+                    "--profile",
+                    "minimal",
+                ],
+            )
+
+            self.assertEqual(1, result.exit_code)
+            self.assertIn("supports only the full 'standard' profile",result.stderr)
+            self.assertFalse((project / ".agent").exists())
 
     def test_status_reports_authoritative_current_records_as_json(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

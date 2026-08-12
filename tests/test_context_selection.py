@@ -5,6 +5,7 @@ import io
 import json
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -139,6 +140,18 @@ class ContextSelectionTests(unittest.TestCase):
 
 
 class ContextSelectionBenchmarkTests(unittest.TestCase):
+    def test_published_report_path_uses_repository_version(self) -> None:
+        from development.tools.benchmark_context_selection import _published_report_path
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "VERSION").write_text("9.8.7\n", encoding="utf-8")
+
+            self.assertEqual(
+                root / "development/benchmarks/context-selection/results/9.8.7.json",
+                _published_report_path(root),
+            )
+
     def test_published_report_matches_current_repository(self) -> None:
         from development.tools.benchmark_context_selection import validate_published_report
 

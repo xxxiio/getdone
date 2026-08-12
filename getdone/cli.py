@@ -14,7 +14,12 @@ from typing import Annotated
 import typer
 
 from getdone import context_selection, project_records
-from getdone.initialise_project import initialise_project, repository_root
+from getdone.initialise_project import (
+    PUBLIC_BOOTSTRAP_PROFILE,
+    initialise_project,
+    repository_root,
+    validate_public_bootstrap_profile,
+)
 from getdone.planning_prompts import planning_prompt
 from getdone.project_agent import (
     ProjectAgentError,
@@ -92,7 +97,10 @@ def root(
 @app.command("init")
 def init_command(
     project_root: Annotated[Path, typer.Option(help="Project directory to bootstrap.")],
-    profile: Annotated[str, typer.Option(help="Bootstrap profile name.")] = "standard",
+    profile: Annotated[
+        str,
+        typer.Option(help="Bootstrap profile; public bootstrap supports the full standard state."),
+    ] = PUBLIC_BOOTSTRAP_PROFILE,
     skills_root: Annotated[
         Path | None,
         typer.Option(help="Skill-pack root. Defaults to GETDONE_SKILLS_ROOT or the checkout."),
@@ -111,9 +119,10 @@ def init_command(
         typer.Option(help="Replace existing bootstrap-managed files."),
     ] = False,
 ) -> None:
-    """Bootstrap project-owned GetDone records."""
+    """Bootstrap the canonical full project-owned GetDone state."""
 
     try:
+        profile = validate_public_bootstrap_profile(profile)
         result = initialise_project(
             project_root,
             profile,

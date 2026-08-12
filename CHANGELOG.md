@@ -19,9 +19,10 @@ Detailed pre-release development history remains available in Git history and
 
 - `getdone guidance` discovers `.project-agent/` from `--project-root`, infers project-defined concerns from known or anticipated affected paths, and composes matching project guidance without teaching GetDone project-specific semantics.
 - `--changed-path` is a guidance-routing signal, not a source-file or model-context selection mechanism.
-- Bootstrap remains a one-time project-state setup; task and project are workflow modes that differ only in which existing records agents read and write.
+- Bootstrap remains a one-time project-state setup; new initialisation always creates the full standard project state, while task and project are workflow modes that differ only in which existing records agents read and write.
 - Journal entries are durable historical memory only and no longer duplicate next-step continuation state.
 - `.agent/` remains the mutable GetDone/project execution-state location; `.project-agent/` is the durable project-specific agent-extension boundary.
+- Context-selection benchmark validation resolves the published report from the repository `VERSION`, preserving prior release snapshots without hardcoded active-version paths.
 - Repository CI, contributor validation, and embedded Python test invocations now run through pytest instead of `unittest discover`.
 
 ## 1.0.0 - 2026-08-03

@@ -45,7 +45,7 @@ class InitialiseProjectTests(unittest.TestCase):
                     "--project-root",
                     str(project_root),
                     "--profile",
-                    "minimal",
+                    "standard",
                     "--skills-root",
                     str(Path(__file__).resolve().parents[1]),
                 ]
@@ -53,6 +53,25 @@ class InitialiseProjectTests(unittest.TestCase):
 
             self.assertEqual(code, 0)
             self.assertTrue((project_root / ".agent" / "skills-reference.md").is_file())
+            self.assertTrue((project_root / ".agent" / "tracking" / "todos.md").is_file())
+
+    def test_public_cli_rejects_internal_minimal_profile(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory) / "cli-project"
+
+            code = initialise_main(
+                [
+                    "--project-root",
+                    str(project_root),
+                    "--profile",
+                    "minimal",
+                    "--skills-root",
+                    str(Path(__file__).resolve().parents[1]),
+                ]
+            )
+
+            self.assertEqual(code, 1)
+            self.assertFalse((project_root / ".agent").exists())
 
 
 class TemplateRenderingTests(unittest.TestCase):
