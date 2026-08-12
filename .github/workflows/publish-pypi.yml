@@ -69,6 +69,9 @@ jobs:
       - name: Build distributions
         run: python -m build
 
+      - name: Verify bundled distribution assets
+        run: python development/scripts/verify_distribution_assets.py --repository-root . --dist-dir dist
+
       - name: Build skill-pack and checksums
         shell: bash
         run: |

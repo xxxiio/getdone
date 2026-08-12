@@ -71,17 +71,23 @@ jobs:
           python-version: "3.11"
       - name: Build Python distributions
         run: python -m pip install build && python -m build
+      - name: Verify bundled distribution assets
+        run: python development/scripts/verify_distribution_assets.py --repository-root . --dist-dir dist
       - name: Build standalone skill pack
         run: python -m development.tools.build_skill_pack --repository-root . --output dist/getdone-skill-pack-${{ github.sha }}.zip
       - name: Verify isolated wheel entry points
         shell: bash
         run: |
-          mkdir wheel-smoke
+          mkdir wheel-smoke wheel-smoke-project
           python -m pip install --target wheel-smoke dist/*.whl
           (
             cd wheel-smoke
+            export PYTHONPATH="$PWD"
             python -c "import getdone; print(getdone.__name__)"
             python -m getdone.cli --help
+            python -m getdone.cli doctor --project-root ../wheel-smoke-project --project-agent off
+            python -m getdone.cli init --project-root ../wheel-smoke-project
+            python -m getdone.cli validate --project-root ../wheel-smoke-project
           )
       - name: Verify standalone skill pack
         shell: bash
