@@ -5,6 +5,23 @@ All notable public changes to GetDone will be documented in this file.
 Detailed pre-release development history remains available in Git history and
 `docs/iterations/`; it is not a public migration contract.
 
+## 1.1.0 - 2026-08-11
+
+### Added
+
+- Optional `.project-agent/` project extensions with an always-loaded `AGENTS.md` baseline and indexed, bounded project-specific guidance.
+- Automatic affected-language inference from repeated `--changed-path` values while retaining repeatable `--language` for explicit polyglot selection.
+- `getdone project-agent validate` and `getdone project-agent inspect` for project-extension health and selection diagnostics.
+- `getdone doctor --project-agent auto|required|off`, with default warnings when a project-specific extension is absent and deep validation when one is present.
+- Pytest as the canonical repository test runner, installed through the `test` extra.
+
+### Changed
+
+- `getdone guidance` discovers `.project-agent/` from `--project-root`, infers project-defined concerns from known or anticipated affected paths, and composes matching project guidance without teaching GetDone project-specific semantics.
+- `--changed-path` is a guidance-routing signal, not a source-file or model-context selection mechanism.
+- `.agent/` remains the mutable GetDone/project execution-state location; `.project-agent/` is the durable project-specific agent-extension boundary.
+- Repository CI, contributor validation, and embedded Python test invocations now run through pytest instead of `unittest discover`.
+
 ## 1.0.0 - 2026-08-03
 
 ### Added

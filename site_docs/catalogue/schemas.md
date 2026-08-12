@@ -17,6 +17,7 @@ JSON schemas that define machine-readable public contracts. Each item links to i
 | [Organisation catalogue overlay](schema-content/skill--schemas--catalogue-overlay-schema-json.md) | `skill/schemas/catalogue-overlay.schema.json` |
 | [Catalogue search result](schema-content/skill--schemas--catalogue-search-result-schema-json.md) | `skill/schemas/catalogue-search-result.schema.json` |
 | [Context Selection Manifest](schema-content/skill--schemas--context-selection-manifest-schema-json.md) | `skill/schemas/context-selection-manifest.schema.json` |
+| [GetDone Project Agent Index](schema-content/skill--schemas--project-agent-index-schema-json.md) | `skill/schemas/project-agent-index.schema.json` |
 | [Project record contracts](schema-content/skill--schemas--project-record-contracts-schema-json.md) | `skill/schemas/project-record-contracts.schema.json` |
 | [Public contract freeze manifest](schema-content/skill--schemas--public-contracts-schema-json.md) | `skill/schemas/public-contracts.schema.json` |
 | [Reuse catalogue](schema-content/skill--schemas--reuse-catalogue-schema-json.md) | `skill/schemas/reuse-catalogue.schema.json` |

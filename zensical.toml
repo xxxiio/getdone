@@ -3,6 +3,7 @@ site_name = "GetDone"
 site_description = "Deterministic workflows, standards, records, and validation for coding agents."
 docs_dir = "site_docs"
 site_dir = "site"
+dev_addr = "localhost:8001"
 use_directory_urls = true
 nav = [
   { "Home" = "index.md" },
@@ -15,6 +16,7 @@ nav = [
     "concepts/planning.md",
   ] },
   { "Guides" = [
+    "guides/agent-usage.md",
     "guides/using-the-pack.md",
     "guides/adopting-existing-project.md",
   ] },

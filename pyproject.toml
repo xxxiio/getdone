@@ -29,6 +29,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+]
 docs = [
   "zensical==0.0.51",
 ]
@@ -62,6 +65,10 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--strict-config", "--strict-markers"]
 
 [tool.pyright]
 include = ["getdone", "tests"]

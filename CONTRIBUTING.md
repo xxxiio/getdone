@@ -41,7 +41,7 @@ python getdone/validate_repository.py
 python getdone/validate_frontmatter.py
 python getdone/generate_registry_indexes.py
 python getdone/rollout_validation.py --repository-root . --check
-python -m unittest discover -s tests
+python -m pytest
 python -m compileall tooling tests
 git diff --check
 ```

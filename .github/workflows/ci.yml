@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install tooling
-        run: python -m pip install -e ".[docs]"
+        run: python -m pip install -e ".[docs,test]"
       - name: Validate repository
         run: python development/scripts/validate_repository.py --repository-root .
       - name: Validate front matter
@@ -44,8 +44,8 @@ jobs:
         run: getdone-select-context --repository-root . --task-class feature --language python --json
       - name: Verify context benchmark
         run: python -m development.tools.benchmark_context_selection --repository-root .
-      - name: Run unit tests
-        run: python -m unittest discover -s tests
+      - name: Run tests
+        run: python -m pytest
       - name: Compile Python tooling
         run: python -m compileall getdone development tests
 
@@ -57,7 +57,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install tooling
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[test]"
       - name: Run rollout matrix
         run: python -m development.tools.rollout_validation --repository-root . --check
 

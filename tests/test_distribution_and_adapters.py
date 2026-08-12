@@ -187,7 +187,7 @@ class ExampleConsumingProjectTests(unittest.TestCase):
             self.assertTrue(report.is_valid)
             self.assertEqual(("org.example@1.0.0",), report.overlay_versions)
             completed = subprocess.run(
-                [sys.executable, "-m", "unittest", "discover", "-s", "tests"],
+                [sys.executable, "-m", "pytest", "tests"],
                 cwd=project,
                 check=False,
                 capture_output=True,
