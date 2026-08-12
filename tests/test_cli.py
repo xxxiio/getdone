@@ -22,13 +22,14 @@ class UmbrellaCliTests(unittest.TestCase):
         for command in (
             "init",
             "validate",
-            "context",
+            "guidance",
             "records",
             "status",
             "doctor",
             "planning-prompt",
         ):
             self.assertIn(command, result.stdout)
+        self.assertNotIn("context", result.stdout)
 
     def test_version_is_eager(self) -> None:
         result = RUNNER.invoke(app, ["--version"])

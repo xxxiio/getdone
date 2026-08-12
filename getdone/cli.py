@@ -161,14 +161,14 @@ def validate_command(
     )
 
 
-@app.command("context")
-def context_command(
+@app.command("guidance")
+def guidance_command(
     task_class: Annotated[str, typer.Option(help="Task class, such as feature or bug-fix.")],
     language: Annotated[
         list[str] | None,
         typer.Option(
             "--language",
-            help="Explicit affected language; repeat as needed. Changed paths are also inferred.",
+            help="Explicit affected language; repeat as needed. Known affected paths may infer more.",
         ),
     ] = None,
     project_root: Annotated[
@@ -177,7 +177,13 @@ def context_command(
     ] = Path.cwd(),
     changed_path: Annotated[
         list[str] | None,
-        typer.Option("--changed-path", help="Affected project path; repeat as needed."),
+        typer.Option(
+            "--changed-path",
+            help=(
+                "Known or anticipated affected project path; repeat as needed. "
+                "Used only to route workflow and project guidance."
+            ),
+        ),
     ] = None,
     concern: Annotated[
         list[str] | None,
@@ -185,12 +191,12 @@ def context_command(
     ] = None,
     no_project_agent: Annotated[
         bool,
-        typer.Option(help="Disable .project-agent discovery for this context selection."),
+        typer.Option(help="Disable .project-agent discovery for this guidance selection."),
     ] = False,
     skills_root: Annotated[Path | None, typer.Option(help="Skill-pack root.")] = None,
     json_output: Annotated[bool, typer.Option("--json", help="Emit JSON.")] = False,
 ) -> None:
-    """Select the minimum task-specific guidance context."""
+    """Select the minimum task-specific workflow and project guidance."""
 
     argv = [
         "--repository-root",

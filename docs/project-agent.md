@@ -34,12 +34,15 @@ GetDone language IDs.
 This means polyglot tasks can normally be invoked as:
 
 ```bash
-getdone context \
+getdone guidance \
   --task-class feature \
   --project-root . \
   --changed-path packages/core/src/lib.rs \
   --changed-path tooling/build.py
 ```
+
+`--changed-path` is a routing signal for workflow and project guidance only. It does not
+tell a coding agent which source files it may inspect or place in its working context.
 
 Explicit `--language` remains useful for new files or planned changes that do not yet
 exist in the diff.

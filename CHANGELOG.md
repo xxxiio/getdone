@@ -17,7 +17,8 @@ Detailed pre-release development history remains available in Git history and
 
 ### Changed
 
-- `getdone context` now discovers `.project-agent/` from `--project-root`, infers project-defined concerns from changed paths, and composes matching project guidance without teaching GetDone project-specific semantics.
+- `getdone guidance` discovers `.project-agent/` from `--project-root`, infers project-defined concerns from known or anticipated affected paths, and composes matching project guidance without teaching GetDone project-specific semantics.
+- `--changed-path` is a guidance-routing signal, not a source-file or model-context selection mechanism.
 - `.agent/` remains the mutable GetDone/project execution-state location; `.project-agent/` is the durable project-specific agent-extension boundary.
 - Repository CI, contributor validation, and embedded Python test invocations now run through pytest instead of `unittest discover`.
 
