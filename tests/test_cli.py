@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import click
 from typer.testing import CliRunner
 
 from getdone.cli import app
@@ -88,6 +89,20 @@ class UmbrellaCliTests(unittest.TestCase):
         self.assertEqual(0, result.exit_code, result.output)
         self.assertNotIn("--profile", result.output)
         self.assertNotIn("required", result.output.lower())
+
+    def test_guidance_emits_content_and_exposes_paths_only_mode(self) -> None:
+        help_result = RUNNER.invoke(app, ["guidance", "--help"], color=False)
+        self.assertEqual(0, help_result.exit_code, help_result.output)
+        self.assertIn("--paths-only", click.unstyle(help_result.output))
+
+        result = RUNNER.invoke(app, [
+            "guidance", "--task-class", "feature", "--language", "python",
+            "--project-root", str(ROOT), "--skills-root", str(ROOT),
+            "--no-project-agent",
+        ])
+        self.assertEqual(0, result.exit_code, result.output)
+        self.assertIn("===== BEGIN GETDONE GUIDANCE =====", result.output)
+        self.assertIn("id: workflow.general.deterministic-development", result.output)
 
     def test_status_reports_authoritative_current_records_as_json(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

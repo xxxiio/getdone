@@ -115,6 +115,72 @@ class ContextSelectionTests(unittest.TestCase):
         self.assertEqual("python", payload["primary_language"])
         self.assertEqual(["python", "rust"], payload["languages"])
 
+    def test_cli_text_emits_selected_document_content(self) -> None:
+        from getdone.context_selection import main
+
+        stdout = io.StringIO()
+        with contextlib.redirect_stdout(stdout):
+            exit_code = main([
+                "--repository-root", str(ROOT),
+                "--project-root", str(ROOT),
+                "--task-class", "feature",
+                "--language", "python",
+                "--no-project-agent",
+            ])
+
+        output = stdout.getvalue()
+        self.assertEqual(0, exit_code)
+        self.assertIn("===== BEGIN GETDONE GUIDANCE =====", output)
+        self.assertIn("--- skill/workflows/general/deterministic-development.md ---", output)
+        self.assertIn("id: workflow.general.deterministic-development", output)
+        self.assertIn("===== END GETDONE GUIDANCE =====", output)
+
+    def test_cli_paths_only_preserves_compact_selection_output(self) -> None:
+        from getdone.context_selection import main
+
+        stdout = io.StringIO()
+        with contextlib.redirect_stdout(stdout):
+            exit_code = main([
+                "--repository-root", str(ROOT),
+                "--project-root", str(ROOT),
+                "--task-class", "feature",
+                "--language", "python",
+                "--no-project-agent",
+                "--paths-only",
+            ])
+
+        output = stdout.getvalue()
+        self.assertEqual(0, exit_code)
+        self.assertIn("skill/workflows/general/deterministic-development.md", output)
+        self.assertNotIn("===== BEGIN GETDONE GUIDANCE =====", output)
+        self.assertNotIn("id: workflow.general.deterministic-development", output)
+
+    def test_cli_text_emits_project_agent_content(self) -> None:
+        from getdone.context_selection import main
+
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            extension = project / ".project-agent"
+            extension.mkdir()
+            (extension / "AGENTS.md").write_text("# Local engineering baseline\n", encoding="utf-8")
+            (extension / "index.json").write_text(
+                json.dumps({"schema_version": 1, "rules": []}),
+                encoding="utf-8",
+            )
+            stdout = io.StringIO()
+            with contextlib.redirect_stdout(stdout):
+                exit_code = main([
+                    "--repository-root", str(ROOT),
+                    "--project-root", str(project),
+                    "--task-class", "feature",
+                    "--language", "python",
+                ])
+
+        output = stdout.getvalue()
+        self.assertEqual(0, exit_code)
+        self.assertIn("--- .project-agent/AGENTS.md ---", output)
+        self.assertIn("# Local engineering baseline", output)
+
     def test_direct_script_smoke(self) -> None:
         completed = subprocess.run(
             [
