@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from click.utils import strip_ansi
 from typer.testing import CliRunner
 
 from getdone.cli import app
@@ -92,7 +93,7 @@ class UmbrellaCliTests(unittest.TestCase):
     def test_guidance_emits_content_and_exposes_paths_only_mode(self) -> None:
         help_result = RUNNER.invoke(app, ["guidance", "--help"], color=False)
         self.assertEqual(0, help_result.exit_code, help_result.output)
-        self.assertIn("--paths-only", help_result.output)
+        self.assertIn("--paths-only", strip_ansi(help_result.output))
 
         result = RUNNER.invoke(app, [
             "guidance", "--task-class", "feature", "--language", "python",
