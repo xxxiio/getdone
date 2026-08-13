@@ -102,15 +102,18 @@ python -m pip install getdone-dev
 getdone --version
 ```
 
-GetDone tooling and the shared skill pack are deliberately separate. Pin a full checkout or
-extract the product-only skill pack, then run:
+The installed package contains the immutable shared skill tree, so normal usage does not
+require a separate skill-pack download or `--skills-root`:
 
 ```bash
-getdone doctor --project-root . --skills-root /path/to/getdone-skill-pack
-getdone init --project-root . --skills-root /path/to/getdone-skill-pack --profile standard
-getdone context --skills-root /path/to/getdone-skill-pack --task-class feature --language python --language rust
-getdone validate --project-root . --skills-root /path/to/getdone-skill-pack
+getdone doctor
+getdone init
+getdone guidance --task-class feature --changed-path src/example.py
+getdone validate --project-root .
 ```
+
+`getdone guidance` emits the selected Markdown content directly for coding agents. Use
+`--paths-only` when you only want the compact logical-path selection.
 
 Follow the [golden-path tutorial](docs/golden-path.md) for one complete iteration.
 

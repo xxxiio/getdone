@@ -199,10 +199,14 @@ def guidance_command(
         bool,
         typer.Option(help="Disable .project-agent discovery for this guidance selection."),
     ] = False,
+    paths_only: Annotated[
+        bool,
+        typer.Option(help="Print only selected logical paths instead of guidance content."),
+    ] = False,
     skills_root: Annotated[Path | None, typer.Option(help="Skill-pack root.")] = None,
     json_output: Annotated[bool, typer.Option("--json", help="Emit JSON.")] = False,
 ) -> None:
-    """Select the minimum task-specific workflow and project guidance."""
+    """Select and emit the minimum task-specific workflow and project guidance."""
 
     argv = [
         "--repository-root",
@@ -220,6 +224,8 @@ def guidance_command(
         argv.extend(["--concern", item])
     if no_project_agent:
         argv.append("--no-project-agent")
+    if paths_only:
+        argv.append("--paths-only")
     if json_output:
         argv.append("--json")
     _exit(context_selection.main(argv))

@@ -139,6 +139,29 @@ def _approximate_tokens(root: Path, paths: Iterable[str]) -> int:
     return max(1, math.ceil(characters / 4))
 
 
+def _print_document(path: str, content: str) -> None:
+    print()
+    print(f"--- {path} ---")
+    print()
+    print(content.rstrip())
+
+
+def _print_guidance_content(
+    repository_root: Path,
+    project_root: Path,
+    selection: ContextSelection,
+    project_documents: Iterable[str],
+) -> None:
+    print()
+    print("===== BEGIN GETDONE GUIDANCE =====")
+    for relative in selection.documents:
+        _print_document(relative, (repository_root / relative).read_text(encoding="utf-8"))
+    for relative in project_documents:
+        _print_document(relative, (project_root / relative).read_text(encoding="utf-8"))
+    print()
+    print("===== END GETDONE GUIDANCE =====")
+
+
 def select_context(root: Path, task_class: str, languages: str | Iterable[str]) -> ContextSelection:
     root = root.resolve()
     if task_class not in TASK_WORKFLOWS:
@@ -213,6 +236,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Disable .project-agent discovery and selection for this command.",
     )
+    parser.add_argument(
+        "--paths-only",
+        action="store_true",
+        help="Print only the selected logical paths instead of their Markdown content.",
+    )
     parser.add_argument("--json", action="store_true", help="Emit the selection manifest as JSON.")
     return parser
 
@@ -271,12 +299,23 @@ def main(argv: list[str] | None = None) -> int:
     print(f"workflow: {selection.workflow}")
     print(f"languages: {', '.join(selection.languages)}")
     print(f"approximate tokens: {selection.approximate_tokens}")
-    for path in selection.documents:
-        print(path)
     if project_selection is not None:
         print(f"project-agent tokens: {project_selection.approximate_tokens}")
-        for path in project_selection.documents:
+
+    if args.paths_only:
+        for path in selection.documents:
             print(path)
+        if project_selection is not None:
+            for path in project_selection.documents:
+                print(path)
+        return 0
+
+    _print_guidance_content(
+        args.repository_root.resolve(),
+        args.project_root.resolve(),
+        selection,
+        project_selection.documents if project_selection is not None else (),
+    )
     return 0
 
 

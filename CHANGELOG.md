@@ -5,6 +5,16 @@ All notable public changes to GetDone will be documented in this file.
 Detailed pre-release development history remains available in Git history and
 `docs/iterations/`; it is not a public migration contract.
 
+## 1.1.2 - 2026-08-12
+
+### Fixed
+
+- `getdone guidance` now emits the full selected shared-skill and `.project-agent`
+  Markdown content by default, so coding agents can consume guidance directly from an
+  installed wheel without resolving logical `skill/...` paths themselves.
+- Added `getdone guidance --paths-only` for the previous compact path-listing output.
+- JSON guidance output remains the existing selection manifest for compatibility.
+
 ## 1.1.1 - 2026-08-12
 
 ### Fixed

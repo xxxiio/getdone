@@ -1,0 +1,274 @@
+diff --git a/VERSION b/VERSION
+--- a/VERSION
++++ b/VERSION
+@@ -1 +1 @@
+-1.1.1
++1.1.2
+diff --git a/getdone/context_selection.py b/getdone/context_selection.py
+--- a/getdone/context_selection.py
++++ b/getdone/context_selection.py
+@@ -134,4 +134,27 @@
+     return max(1, math.ceil(characters / 4))
+ 
+ 
++def _print_document(path: str, content: str) -> None:
++    print()
++    print(f"--- {path} ---")
++    print()
++    print(content.rstrip())
++
++
++def _print_guidance_content(
++    repository_root: Path,
++    project_root: Path,
++    selection: ContextSelection,
++    project_documents: Iterable[str],
++) -> None:
++    print()
++    print("===== BEGIN GETDONE GUIDANCE =====")
++    for relative in selection.documents:
++        _print_document(relative, (repository_root / relative).read_text(encoding="utf-8"))
++    for relative in project_documents:
++        _print_document(relative, (project_root / relative).read_text(encoding="utf-8"))
++    print()
++    print("===== END GETDONE GUIDANCE =====")
++
++
+ def select_context(root: Path, task_class: str, languages: str | Iterable[str]) -> ContextSelection:
+@@ -219,5 +242,10 @@
+         action="store_true",
+         help="Disable .project-agent discovery and selection for this command.",
+     )
++    parser.add_argument(
++        "--paths-only",
++        action="store_true",
++        help="Print only the selected logical paths instead of their Markdown content.",
++    )
+     parser.add_argument("--json", action="store_true", help="Emit the selection manifest as JSON.")
+     return parser
+@@ -286,10 +314,21 @@
+     print(f"workflow: {selection.workflow}")
+     print(f"languages: {', '.join(selection.languages)}")
+     print(f"approximate tokens: {selection.approximate_tokens}")
+-    for path in selection.documents:
+-        print(path)
+     if project_selection is not None:
+         print(f"project-agent tokens: {project_selection.approximate_tokens}")
+-        for path in project_selection.documents:
++
++    if args.paths_only:
++        for path in selection.documents:
+             print(path)
++        if project_selection is not None:
++            for path in project_selection.documents:
++                print(path)
++        return 0
++
++    _print_guidance_content(
++        args.repository_root.resolve(),
++        args.project_root.resolve(),
++        selection,
++        project_selection.documents if project_selection is not None else (),
++    )
+     return 0
+diff --git a/getdone/cli.py b/getdone/cli.py
+--- a/getdone/cli.py
++++ b/getdone/cli.py
+@@ -191,10 +191,14 @@
+         bool,
+         typer.Option(help="Disable .project-agent discovery for this guidance selection."),
+     ] = False,
++    paths_only: Annotated[
++        bool,
++        typer.Option(help="Print only selected logical paths instead of guidance content."),
++    ] = False,
+     skills_root: Annotated[Path | None, typer.Option(help="Skill-pack root.")] = None,
+     json_output: Annotated[bool, typer.Option("--json", help="Emit JSON.")] = False,
+ ) -> None:
+-    """Select the minimum task-specific workflow and project guidance."""
++    """Select and emit the minimum task-specific workflow and project guidance."""
+ 
+     argv = [
+         "--repository-root",
+@@ -212,5 +216,7 @@
+         argv.extend(["--concern", item])
+     if no_project_agent:
+         argv.append("--no-project-agent")
++    if paths_only:
++        argv.append("--paths-only")
+     if json_output:
+         argv.append("--json")
+diff --git a/tests/test_context_selection.py b/tests/test_context_selection.py
+--- a/tests/test_context_selection.py
++++ b/tests/test_context_selection.py
+@@ -102,4 +102,70 @@
+         self.assertEqual("python", payload["primary_language"])
+         self.assertEqual(["python", "rust"], payload["languages"])
+ 
++    def test_cli_text_emits_selected_document_content(self) -> None:
++        from getdone.context_selection import main
++
++        stdout = io.StringIO()
++        with contextlib.redirect_stdout(stdout):
++            exit_code = main([
++                "--repository-root", str(ROOT),
++                "--project-root", str(ROOT),
++                "--task-class", "feature",
++                "--language", "python",
++                "--no-project-agent",
++            ])
++
++        output = stdout.getvalue()
++        self.assertEqual(0, exit_code)
++        self.assertIn("===== BEGIN GETDONE GUIDANCE =====", output)
++        self.assertIn("--- skill/workflows/general/deterministic-development.md ---", output)
++        self.assertIn("id: workflow.general.deterministic-development", output)
++        self.assertIn("===== END GETDONE GUIDANCE =====", output)
++
++    def test_cli_paths_only_preserves_compact_selection_output(self) -> None:
++        from getdone.context_selection import main
++
++        stdout = io.StringIO()
++        with contextlib.redirect_stdout(stdout):
++            exit_code = main([
++                "--repository-root", str(ROOT),
++                "--project-root", str(ROOT),
++                "--task-class", "feature",
++                "--language", "python",
++                "--no-project-agent",
++                "--paths-only",
++            ])
++
++        output = stdout.getvalue()
++        self.assertEqual(0, exit_code)
++        self.assertIn("skill/workflows/general/deterministic-development.md", output)
++        self.assertNotIn("===== BEGIN GETDONE GUIDANCE =====", output)
++        self.assertNotIn("id: workflow.general.deterministic-development", output)
++
++    def test_cli_text_emits_project_agent_content(self) -> None:
++        from getdone.context_selection import main
++
++        with tempfile.TemporaryDirectory() as directory:
++            project = Path(directory)
++            extension = project / ".project-agent"
++            extension.mkdir()
++            (extension / "AGENTS.md").write_text("# Local engineering baseline\n", encoding="utf-8")
++            (extension / "index.json").write_text(
++                json.dumps({"schema_version": 1, "rules": []}),
++                encoding="utf-8",
++            )
++            stdout = io.StringIO()
++            with contextlib.redirect_stdout(stdout):
++                exit_code = main([
++                    "--repository-root", str(ROOT),
++                    "--project-root", str(project),
++                    "--task-class", "feature",
++                    "--language", "python",
++                ])
++
++        output = stdout.getvalue()
++        self.assertEqual(0, exit_code)
++        self.assertIn("--- .project-agent/AGENTS.md ---", output)
++        self.assertIn("# Local engineering baseline", output)
++
+     def test_direct_script_smoke(self) -> None:
+diff --git a/tests/test_cli.py b/tests/test_cli.py
+--- a/tests/test_cli.py
++++ b/tests/test_cli.py
+@@ -86,4 +86,18 @@
+         self.assertNotIn("--profile", result.output)
+         self.assertNotIn("required", result.output.lower())
+ 
++    def test_guidance_emits_content_and_exposes_paths_only_mode(self) -> None:
++        help_result = RUNNER.invoke(app, ["guidance", "--help"])
++        self.assertEqual(0, help_result.exit_code, help_result.output)
++        self.assertIn("--paths-only", help_result.output)
++
++        result = RUNNER.invoke(app, [
++            "guidance", "--task-class", "feature", "--language", "python",
++            "--project-root", str(ROOT), "--skills-root", str(ROOT),
++            "--no-project-agent",
++        ])
++        self.assertEqual(0, result.exit_code, result.output)
++        self.assertIn("===== BEGIN GETDONE GUIDANCE =====", result.output)
++        self.assertIn("id: workflow.general.deterministic-development", result.output)
++
+     def test_status_reports_authoritative_current_records_as_json(self) -> None:
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -5,4 +5,14 @@
+ Detailed pre-release development history remains available in Git history and
+ `docs/iterations/`; it is not a public migration contract.
+ 
++## 1.1.2 - 2026-08-12
++
++### Fixed
++
++- `getdone guidance` now emits the full selected shared-skill and `.project-agent`
++  Markdown content by default, so coding agents can consume guidance directly from an
++  installed wheel without resolving logical `skill/...` paths themselves.
++- Added `getdone guidance --paths-only` for the previous compact path-listing output.
++- JSON guidance output remains the existing selection manifest for compatibility.
++
+ ## 1.1.1 - 2026-08-12
+diff --git a/development/benchmarks/context-selection/results/1.1.2.json b/development/benchmarks/context-selection/results/1.1.2.json
+new file mode 100644
+--- /dev/null
++++ b/development/benchmarks/context-selection/results/1.1.2.json
+@@ -0,0 +1,27 @@
++{
++  "average_selected_tokens": 3829,
++  "average_token_reduction": 0.9175,
++  "baseline_documents": 134,
++  "baseline_tokens": 46390,
++  "benchmark_cases": 9,
++  "cases": [
++    {"id":"python-feature","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3910,"token_reduction":0.9157},
++    {"id":"rust-feature","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3843,"token_reduction":0.9172},
++    {"id":"python-bug-fix","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3867,"token_reduction":0.9166},
++    {"id":"cpp-bug-fix","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3858,"token_reduction":0.9168},
++    {"id":"python-refactoring","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3866,"token_reduction":0.9167},
++    {"id":"dart-refactoring","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3862,"token_reduction":0.9167},
++    {"id":"q-investigation","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":4,"route_correct":true,"selected_documents":5,"selected_tokens":3684,"token_reduction":0.9206},
++    {"id":"rust-investigation","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":4,"route_correct":true,"selected_documents":5,"selected_tokens":3615,"token_reduction":0.9221},
++    {"id":"typescript-feature","missed_acceptance_gates":[],"missing_documents":[],"product_only":true,"required_documents":5,"route_correct":true,"selected_documents":6,"selected_tokens":3953,"token_reduction":0.9148}
++  ],
++  "maximum_selected_documents": 6,
++  "minimum_token_reduction": 0.9148,
++  "missed_acceptance_gates": 0,
++  "reduction_vs_rc1_selected_context": 0.2116,
++  "required_document_recall": 1.0,
++  "route_accuracy": 1.0,
++  "schema_version": 2,
++  "scope_note": "Static routing and document coverage; coding outcomes require dogfooding.",
++  "tooling_justified": true
++}
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -7,15 +7,18 @@
+ getdone --version
+ ```
+ 
+-GetDone tooling and the shared skill pack are deliberately separate. Pin a full checkout or
+-extract the product-only skill pack, then run:
++The installed package contains the immutable shared skill tree, so normal usage does not
++require a separate skill-pack download or `--skills-root`:
+ 
+ ```bash
+-getdone doctor --project-root . --skills-root /path/to/getdone-skill-pack
+-getdone init --project-root . --skills-root /path/to/getdone-skill-pack --profile standard
+-getdone context --skills-root /path/to/getdone-skill-pack --task-class feature --language python --language rust
+-getdone validate --project-root . --skills-root /path/to/getdone-skill-pack
++getdone doctor
++getdone init
++getdone guidance --task-class feature --changed-path src/example.py
++getdone validate --project-root .
+ ```
++
++`getdone guidance` emits the selected Markdown content directly for coding agents. Use
++`--paths-only` when you only want the compact logical-path selection.
+ 
+ Follow the [golden-path tutorial](docs/golden-path.md) for one complete iteration.
+ 
